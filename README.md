@@ -1,36 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DocRebrander Documentation
 
-## Getting Started
+Welcome to the DocRebrander documentation! This directory contains comprehensive information about the project's architecture, technical specifications, development flows, and usage guidelines.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*   [Technical Specification](tech_spec.md): The core technical blueprint of the DocRebrander system.
+*   [System Architecture](architecture.md): A high-level overview of the system's components and their interactions.
+*   [Data Structures](data_structures.md): Detailed information on the canonical JSON structure and schema validation.
+*   [Gemini AI Integration](gemini_integration.md): How DocRebrander integrates with Google Gemini AI, including prompt engineering and error handling.
+*   [Data Transformation Adapters](adapters.md): Explanation of the adapters used for data conversion between different systems (e.g., Canonical to Tiptap, Tiptap to pdfme).
+*   [Frontend Implementation](frontend_implementation.md): Details on the Next.js application, React hooks, and components.
+*   [Performance Optimization & Error Handling](performance_error_handling.md): Strategies for performance and robust error management.
+*   [Deployment Considerations](deployment.md): Guidelines for deploying the DocRebrander application.
+*   [Development Flows](flows/index.md): Step-by-step descriptions of key data flows within the application.
+*   [Usage Guide](USAGE.md): How to use the DocRebrander application.
+*   [Contributing](CONTRIBUTING.md): Guidelines for contributing to the project.
+*   [Glossary](GLOSSARY.md): Definitions of key terms and concepts used in the project.
