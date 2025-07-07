@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Upload, 
   FileText, 
@@ -15,7 +18,12 @@ import {
   Loader2,
   File,
   Eye,
-  RotateCcw
+  RotateCcw,
+  Zap,
+  Image as ImageIcon,
+  Brain,
+  Clock,
+  Settings2
 } from 'lucide-react';
 
 // =============================================================================
@@ -23,22 +31,33 @@ import {
 // =============================================================================
 
 interface PdfUploadProps {
-  onTextExtracted: (text: string, metadata?: PdfMetadata) => void;
+  onTextExtracted: (text: string, metadata?: EnhancedPdfMetadata) => void;
   onError: (error: string) => void;
   disabled?: boolean;
   className?: string;
 }
 
-interface PdfMetadata {
+interface EnhancedPdfMetadata {
   filename: string;
   fileSize: number;
   pageCount: number;
-  extractionTime: number;
+  totalProcessingTime: number;
+  textPages: number;
+  ocrPages: number;
+  skippedPages: number;
+  method: 'text-only' | 'ocr-only' | 'hybrid';
+  ocrEnabled: boolean;
+  needsOcr: boolean;
   title?: string;
   author?: string;
   creator?: string;
-  creationDate?: string;
-  modDate?: string;
+}
+
+interface OcrOptions {
+  language: string;
+  enhanceImage: boolean;
+  density: number;
+  format: 'png' | 'jpg' | 'jpeg';
 }
 
 interface UploadState {
@@ -47,8 +66,12 @@ interface UploadState {
   progress: number;
   file: File | null;
   extractedText: string | null;
-  metadata: PdfMetadata | null;
+  metadata: EnhancedPdfMetadata | null;
   error: string | null;
+  processingPhase: string | null;
+  enableOcr: boolean;
+  ocrOptions: OcrOptions;
+  showAdvanced: boolean;
 }
 
 // =============================================================================
@@ -69,6 +92,15 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
     extractedText: null,
     metadata: null,
     error: null,
+    processingPhase: null,
+    enableOcr: true,
+    ocrOptions: {
+      language: 'en',
+      enhanceImage: true,
+      density: 300,
+      format: 'png',
+    },
+    showAdvanced: false,
   });
 
   // =============================================================================
@@ -89,10 +121,10 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       return;
     }
 
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024;
+    // Validate file size (50MB limit for OCR processing)
+    const maxSize = 50 * 1024 * 1024;
     if (file.size > maxSize) {
-      const error = 'File size must be less than 10MB';
+      const error = 'File size must be less than 50MB for OCR processing';
       setState(prev => ({ ...prev, error }));
       onError(error);
       return;
@@ -108,6 +140,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       error: null,
       extractedText: null,
       metadata: null,
+      processingPhase: 'Uploading...',
     }));
 
     try {
@@ -119,37 +152,42 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
         isUploading: false,
         isExtracting: false,
         error: errorMessage,
+        processingPhase: null,
       }));
       onError(errorMessage);
     }
   }, [disabled, onError]);
 
   const extractTextFromPdf = async (file: File) => {
-    setState(prev => ({ ...prev, isExtracting: true, progress: 20 }));
+    setState(prev => ({ 
+      ...prev, 
+      isExtracting: true, 
+      progress: 10,
+      processingPhase: 'Analyzing PDF structure...'
+    }));
 
     try {
       // Create form data
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('options', JSON.stringify({
+        enableOcr: state.enableOcr,
+        ocrOptions: state.ocrOptions,
+      }));
 
-      setState(prev => ({ ...prev, progress: 40 }));
+      setState(prev => ({ 
+        ...prev, 
+        progress: 30,
+        processingPhase: state.enableOcr ? 'Checking if OCR is needed...' : 'Extracting text...'
+      }));
 
-      // Try main endpoint first, fallback to alternative if needed
-      let response = await fetch('/api/extract-pdf', {
+      // Call the enhanced OCR endpoint
+      const response = await fetch('/api/extract-pdf-ocr', {
         method: 'POST',
         body: formData,
       });
 
-      // If main endpoint fails, try alternative
-      if (!response.ok && response.status === 500) {
-        console.log('Trying alternative PDF extraction endpoint...');
-        response = await fetch('/api/extract-pdf-alt', {
-          method: 'POST',
-          body: formData,
-        });
-      }
-
-      setState(prev => ({ ...prev, progress: 60 }));
+      setState(prev => ({ ...prev, progress: 70 }));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -158,13 +196,27 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
 
       const result = await response.json();
 
-      setState(prev => ({ ...prev, progress: 80 }));
+      setState(prev => ({ 
+        ...prev, 
+        progress: 90,
+        processingPhase: 'Finalizing...'
+      }));
 
       if (!result.success) {
         throw new Error(result.error || 'Text extraction failed');
       }
 
       const { text, metadata } = result.data;
+
+      // Determine processing phase message
+      let phaseMessage = 'Processing complete';
+      if (metadata.method === 'hybrid') {
+        phaseMessage = `Hybrid processing: ${metadata.textPages} text pages, ${metadata.ocrPages} OCR pages`;
+      } else if (metadata.method === 'ocr-only') {
+        phaseMessage = `OCR processing: ${metadata.ocrPages} pages processed`;
+      } else {
+        phaseMessage = `Text extraction: ${metadata.textPages} pages processed`;
+      }
 
       setState(prev => ({
         ...prev,
@@ -174,6 +226,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
         extractedText: text,
         metadata,
         error: null,
+        processingPhase: phaseMessage,
       }));
 
       // Notify parent component
@@ -181,6 +234,10 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
 
     } catch (error) {
       console.error('PDF extraction failed:', error);
+      setState(prev => ({
+        ...prev,
+        processingPhase: 'Processing failed',
+      }));
       throw error;
     }
   };
@@ -198,6 +255,10 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       extractedText: null,
       metadata: null,
       error: null,
+      processingPhase: null,
+      enableOcr: state.enableOcr,
+      ocrOptions: state.ocrOptions,
+      showAdvanced: state.showAdvanced,
     });
   };
 
@@ -208,6 +269,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
         error: null,
         isUploading: true,
         progress: 0,
+        processingPhase: 'Retrying...',
       }));
       extractTextFromPdf(state.file);
     }
@@ -217,6 +279,17 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
     if (state.extractedText && state.metadata) {
       onTextExtracted(state.extractedText, state.metadata);
     }
+  };
+
+  const handleOcrToggle = (enabled: boolean) => {
+    setState(prev => ({ ...prev, enableOcr: enabled }));
+  };
+
+  const handleOcrOptionChange = (key: keyof OcrOptions, value: any) => {
+    setState(prev => ({
+      ...prev,
+      ocrOptions: { ...prev.ocrOptions, [key]: value },
+    }));
   };
 
   // =============================================================================
@@ -267,12 +340,106 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
               or <span className="text-primary underline">click to browse</span>
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              Maximum file size: 10MB
+              Maximum file size: 50MB • OCR {state.enableOcr ? 'enabled' : 'disabled'}
             </p>
           </div>
         )}
       </div>
     </div>
+  );
+
+  const renderSettings = () => (
+    <Card className="mb-4">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <Settings2 className="h-4 w-4" />
+          Processing Settings
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <Label htmlFor="enable-ocr" className="text-sm font-medium">
+              Enable OCR for Scanned PDFs
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Automatically detects and processes scanned pages using AI
+            </p>
+          </div>
+          <Switch
+            id="enable-ocr"
+            checked={state.enableOcr}
+            onCheckedChange={handleOcrToggle}
+          />
+        </div>
+
+        {state.enableOcr && (
+          <div className="space-y-3 pt-2 border-t">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setState(prev => ({ ...prev, showAdvanced: !prev.showAdvanced }))}
+              className="h-auto p-0 text-xs"
+            >
+              {state.showAdvanced ? 'Hide' : 'Show'} Advanced OCR Settings
+            </Button>
+
+            {state.showAdvanced && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs">Language</Label>
+                  <Select
+                    value={state.ocrOptions.language}
+                    onValueChange={(value) => handleOcrOptionChange('language', value)}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="vi">Vietnamese</SelectItem>
+                      <SelectItem value="fr">French</SelectItem>
+                      <SelectItem value="de">German</SelectItem>
+                      <SelectItem value="es">Spanish</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="text-xs">Image Quality</Label>
+                  <Select
+                    value={state.ocrOptions.density.toString()}
+                    onValueChange={(value) => handleOcrOptionChange('density', parseInt(value))}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="150">Low (150 DPI)</SelectItem>
+                      <SelectItem value="300">Standard (300 DPI)</SelectItem>
+                      <SelectItem value="600">High (600 DPI)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="col-span-2">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="enhance-image"
+                      checked={state.ocrOptions.enhanceImage}
+                      onCheckedChange={(checked) => handleOcrOptionChange('enhanceImage', checked)}
+                    />
+                    <Label htmlFor="enhance-image" className="text-xs">
+                      Enhance image quality for better OCR results
+                    </Label>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 
   const renderProgress = () => (
@@ -288,17 +455,21 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
           </p>
         </div>
         {(state.isUploading || state.isExtracting) && (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <div className="flex items-center space-x-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            {state.enableOcr && (
+              <div className="flex items-center space-x-1">
+                <Brain className="h-3 w-3 text-blue-500" />
+                <span className="text-xs text-muted-foreground">AI</span>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
       <div className="space-y-2">
         <div className="flex justify-between text-sm">
-          <span>
-            {state.isUploading && 'Uploading...'}
-            {state.isExtracting && 'Extracting text...'}
-            {state.progress === 100 && 'Complete'}
-          </span>
+          <span>{state.processingPhase || 'Processing...'}</span>
           <span>{state.progress}%</span>
         </div>
         <Progress value={state.progress} />
@@ -308,7 +479,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
 
   const renderResult = () => (
     <div className="space-y-4">
-      {/* File Info */}
+      {/* File Info with Processing Method */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
@@ -316,9 +487,13 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
           </div>
           <div>
             <p className="font-medium">{state.metadata?.filename}</p>
-            <p className="text-sm text-muted-foreground">
-              {state.metadata?.pageCount} pages • {formatFileSize(state.metadata?.fileSize || 0)}
-            </p>
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <span>{state.metadata?.pageCount} pages</span>
+              <span>•</span>
+              <span>{formatFileSize(state.metadata?.fileSize || 0)}</span>
+              <span>•</span>
+              <span>{state.metadata?.totalProcessingTime}ms</span>
+            </div>
           </div>
         </div>
         <Button variant="ghost" size="sm" onClick={handleClear}>
@@ -326,29 +501,52 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
         </Button>
       </div>
 
-      {/* Metadata */}
+      {/* Processing Method Info */}
       {state.metadata && (
         <div className="grid grid-cols-2 gap-2 p-3 bg-muted rounded-lg">
-          <div className="text-sm">
-            <span className="text-muted-foreground">Pages:</span>
-            <span className="ml-2 font-medium">{state.metadata.pageCount}</span>
-          </div>
-          <div className="text-sm">
-            <span className="text-muted-foreground">Size:</span>
-            <span className="ml-2 font-medium">{formatFileSize(state.metadata.fileSize)}</span>
-          </div>
-          {state.metadata.title && (
-            <div className="text-sm col-span-2">
-              <span className="text-muted-foreground">Title:</span>
-              <span className="ml-2 font-medium">{state.metadata.title}</span>
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Badge variant={state.metadata.method === 'hybrid' ? 'default' : 'secondary'}>
+                {state.metadata.method.toUpperCase()}
+              </Badge>
+              {state.metadata.ocrEnabled && (
+                <div className="flex items-center space-x-1">
+                  <Brain className="h-3 w-3 text-blue-500" />
+                  <span className="text-xs text-blue-500">AI</span>
+                </div>
+              )}
             </div>
-          )}
-          {state.metadata.author && (
-            <div className="text-sm col-span-2">
-              <span className="text-muted-foreground">Author:</span>
-              <span className="ml-2 font-medium">{state.metadata.author}</span>
+            
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="flex items-center space-x-1">
+                <FileText className="h-3 w-3" />
+                <span>{state.metadata.textPages} text</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <ImageIcon className="h-3 w-3" />
+                <span>{state.metadata.ocrPages} OCR</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="h-3 w-3" />
+                <span>{Math.round(state.metadata.totalProcessingTime / 1000)}s</span>
+              </div>
             </div>
-          )}
+          </div>
+
+          <div className="space-y-1">
+            {state.metadata.title && (
+              <div className="text-xs">
+                <span className="text-muted-foreground">Title:</span>
+                <span className="ml-1 font-medium">{state.metadata.title}</span>
+              </div>
+            )}
+            {state.metadata.author && (
+              <div className="text-xs">
+                <span className="text-muted-foreground">Author:</span>
+                <span className="ml-1 font-medium">{state.metadata.author}</span>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -373,8 +571,8 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       {/* Actions */}
       <div className="flex space-x-2">
         <Button onClick={handleUseText} className="flex-1">
-          <FileText className="h-4 w-4 mr-2" />
-          Use This Text
+          <Zap className="h-4 w-4 mr-2" />
+          Process with AI
         </Button>
         <Button variant="outline" onClick={handleClear}>
           <Upload className="h-4 w-4 mr-2" />
@@ -389,7 +587,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       <div className="flex items-start space-x-3 p-4 border border-destructive/50 rounded-lg bg-destructive/5">
         <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
         <div className="flex-1">
-          <p className="font-medium text-destructive">Upload Failed</p>
+          <p className="font-medium text-destructive">Processing Failed</p>
           <p className="text-sm text-destructive/80 mt-1">{state.error}</p>
         </div>
       </div>
@@ -414,23 +612,27 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
   // =============================================================================
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Upload PDF Document
-        </CardTitle>
-        <CardDescription>
-          Upload a PDF file to automatically extract and process its text content
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {state.error && renderError()}
-        {!state.error && !state.file && renderDropzone()}
-        {!state.error && state.file && (state.isUploading || state.isExtracting) && renderProgress()}
-        {!state.error && state.file && state.extractedText && renderResult()}
-      </CardContent>
-    </Card>
+    <div className={className}>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5" />
+            Upload PDF Document
+          </CardTitle>
+          <CardDescription>
+            Upload a PDF file to extract text automatically. OCR support included for scanned documents.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!state.file && renderSettings()}
+          
+          {state.error && renderError()}
+          {!state.error && !state.file && renderDropzone()}
+          {!state.error && state.file && (state.isUploading || state.isExtracting) && renderProgress()}
+          {!state.error && state.file && state.extractedText && renderResult()}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
@@ -447,16 +649,5 @@ function formatFileSize(bytes: number): string {
   
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
-
-// Import Label component
-const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ 
-  className, 
-  ...props 
-}) => (
-  <label 
-    className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${className}`} 
-    {...props} 
-  />
-);
 
 export default PdfUpload;
