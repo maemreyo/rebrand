@@ -134,11 +134,20 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
 
       setState(prev => ({ ...prev, progress: 40 }));
 
-      // Send to API
-      const response = await fetch('/api/extract-pdf', {
+      // Try main endpoint first, fallback to alternative if needed
+      let response = await fetch('/api/extract-pdf', {
         method: 'POST',
         body: formData,
       });
+
+      // If main endpoint fails, try alternative
+      if (!response.ok && response.status === 500) {
+        console.log('Trying alternative PDF extraction endpoint...');
+        response = await fetch('/api/extract-pdf-alt', {
+          method: 'POST',
+          body: formData,
+        });
+      }
 
       setState(prev => ({ ...prev, progress: 60 }));
 

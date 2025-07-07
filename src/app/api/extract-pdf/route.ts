@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import pdfParse from 'pdf-parse';
 
 // =============================================================================
 // Request/Response Schemas
@@ -74,13 +73,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<ExtractPd
     // Convert file to buffer
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    // Extract text using pdf-parse
+    // Extract text using pdf-parse with dynamic import
     let pdfData;
     try {
+      // Dynamic import to avoid SSR issues
+      const pdfParse = (await import('pdf-parse')).default;
+      
       pdfData = await pdfParse(buffer, {
         // Options for pdf-parse
         max: 0, // Parse all pages (0 = unlimited)
-        version: 'v1.10.100', // PDF.js version
       });
     } catch (error) {
       console.error('PDF parsing error:', error);
