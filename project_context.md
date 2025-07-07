@@ -41,6 +41,8 @@ Schema validation is enforced using `Zod` to ensure data integrity and consisten
 -   `src/lib/supabase.ts`: Configuration and client for interacting with Supabase.
 -   `src/lib/utils.ts`: Utility functions (e.g., `cn` for Tailwind CSS class merging).
 -   `docs/`: Contains comprehensive documentation on various aspects of the project, including architecture, data structures, Gemini integration, adapters, frontend implementation, deployment, and development flows.
+-   `src/components/ui/`: A collection of reusable UI components (e.g., Button, Input, Card) built with Radix UI and styled with Tailwind CSS. These components are designed for consistency and accessibility across the application.
+-   `UI_COMPONENTS.md`: Documentation detailing the usage, props, and development guidelines for the UI components.
 -   `components.json`: Configuration for UI components.
 -   `public/`: Static assets like images.
 
