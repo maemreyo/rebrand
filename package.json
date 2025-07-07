@@ -2,6 +2,7 @@
   "name": "docrebrander",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "AI-powered document processing pipeline that converts raw text into structured JSON, enables rich text editing, and generates publication-ready PDFs.",
   "keywords": [
     "AI",
