@@ -254,7 +254,7 @@ function sanitizeText(text: string): string {
 // Error Response Helpers
 // =============================================================================
 
-export function createErrorResponse(
+function createErrorResponse(
   error: string,
   status: number = 400,
   details?: any
@@ -269,7 +269,7 @@ export function createErrorResponse(
   );
 }
 
-export function createSuccessResponse(
+function createSuccessResponse(
   data: AnalyzeResponse['data']
 ): NextResponse<AnalyzeResponse> {
   return NextResponse.json(

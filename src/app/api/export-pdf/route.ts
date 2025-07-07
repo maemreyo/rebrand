@@ -119,13 +119,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       template = templateData.template_json;
     } else {
       // Use default template
-      template = createBasicTextTemplate({
-        pageWidth: getPageDimensions(options?.pageSize || 'A4').width,
-        pageHeight: getPageDimensions(options?.pageSize || 'A4').height,
-        margin: options?.margin || 20,
-        defaultFont: options?.font || 'NotoSansCJK-Regular',
-        defaultFontSize: options?.fontSize || 12,
-      });
+      template = createBasicTextTemplate();
     }
 
     // Transform Tiptap JSON to pdfme format
@@ -221,7 +215,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 // Alternative POST Handler - JSON Response (for frontend handling)
 // =============================================================================
 
-export async function generatePdfAsBase64(
+async function generatePdfAsBase64(
   tiptapJson: JSONContent,
   templateId?: string,
   customTemplate?: Template,
@@ -360,7 +354,7 @@ function logPdfGeneration(
 // Error Response Helpers
 // =============================================================================
 
-export function createPdfErrorResponse(
+function createPdfErrorResponse(
   error: string,
   status: number = 400,
   details?: any
@@ -379,14 +373,14 @@ export function createPdfErrorResponse(
 // Custom Error Classes
 // =============================================================================
 
-export class PdfExportError extends Error {
+class PdfExportError extends Error {
   constructor(message: string, public cause?: Error) {
     super(message);
     this.name = "PdfExportError";
   }
 }
 
-export class TemplateNotFoundError extends Error {
+class TemplateNotFoundError extends Error {
   constructor(templateId: string) {
     super(`Template with ID ${templateId} not found`);
     this.name = "TemplateNotFoundError";

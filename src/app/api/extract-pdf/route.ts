@@ -316,21 +316,21 @@ function logPdfProcessing(
 // Error Classes
 // =============================================================================
 
-export class PdfExtractionError extends Error {
+class PdfExtractionError extends Error {
   constructor(message: string, public cause?: Error) {
     super(message);
     this.name = "PdfExtractionError";
   }
 }
 
-export class InvalidPdfError extends Error {
+class InvalidPdfError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "InvalidPdfError";
   }
 }
 
-export class FileSizeError extends Error {
+class FileSizeError extends Error {
   constructor(size: number, maxSize: number) {
     super(`File size ${size} bytes exceeds maximum ${maxSize} bytes`);
     this.name = "FileSizeError";

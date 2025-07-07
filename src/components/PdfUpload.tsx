@@ -158,7 +158,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
     }
   }, [disabled, onError]);
 
-  const extractTextFromPdf = async (file: File) => {
+  const extractTextFromPdf = useCallback(async (file: File) => {
     setState(prev => ({ 
       ...prev, 
       isExtracting: true, 
@@ -240,7 +240,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({
       }));
       throw error;
     }
-  };
+  }, [state.enableOcr, state.ocrOptions, onTextExtracted]);
 
   // =============================================================================
   // Event Handlers

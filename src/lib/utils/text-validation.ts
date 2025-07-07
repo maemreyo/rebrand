@@ -53,8 +53,15 @@ export class TextQualityValidator {
 
   /**
    * Initialize optional dependencies (vntk, fast-password-entropy)
+   * Only loads on server-side environment
    */
   private async initializeDependencies(): Promise<void> {
+    // Only initialize on server-side
+    if (typeof window !== 'undefined') {
+      console.warn("Server-side dependencies not available in browser environment");
+      return;
+    }
+
     try {
       // Try to load fast-password-entropy for entropy calculation
       const stringEntropy = await import("fast-password-entropy");
@@ -256,6 +263,12 @@ export class TextQualityValidator {
   private async calculateVietnameseMetrics(
     text: string
   ): Promise<{ wordCount: number; syllableCount: number }> {
+    // Only run on server-side
+    if (typeof window !== 'undefined') {
+      console.warn("VNTK is server-side only, using fallback");
+      return this.calculateFallbackMetrics(text);
+    }
+
     try {
       const vntk = await import("vntk");
       const tokenizer = vntk.wordTokenizer();

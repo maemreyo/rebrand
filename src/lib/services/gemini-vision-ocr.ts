@@ -282,22 +282,23 @@ export class GeminiVisionOCR {
    */
   private async callGeminiVision(request: GeminiVisionRequest): Promise<string> {
     try {
-      const model = this.genAI.getGenerativeModel({ 
-        model: request.model || this.config.model 
+      const result = await this.genAI.models.generateContent({
+        model: request.model || this.config.model,
+        contents: [
+          { text: request.prompt },
+          {
+            inlineData: {
+              data: request.image,
+              mimeType: 'image/png',
+            },
+          },
+        ],
+        config: {
+          maxOutputTokens: request.maxTokens,
+        },
       });
 
-      const result = await model.generateContent([
-        request.prompt,
-        {
-          inlineData: {
-            data: request.image,
-            mimeType: 'image/png',
-          },
-        },
-      ]);
-
-      const response = result.response;
-      const text = response.text();
+      const text = result.text;
 
       if (!text || text.trim().length === 0) {
         throw new Error('Empty response from Gemini Vision API');

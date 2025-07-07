@@ -708,7 +708,7 @@ function logEnhancedProcessingStats(
 // Enhanced Error Classes
 // =============================================================================
 
-export class EnhancedPdfOcrExtractionError extends Error {
+class EnhancedPdfOcrExtractionError extends Error {
   constructor(
     message: string,
     public cause?: Error,
@@ -719,7 +719,7 @@ export class EnhancedPdfOcrExtractionError extends Error {
   }
 }
 
-export class ValidationConfigError extends Error {
+class ValidationConfigError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ValidationConfigError";

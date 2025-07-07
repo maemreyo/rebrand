@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         "pdf-parse": "commonjs pdf-parse",
         "pdf2pic": "commonjs pdf2pic",
         "sharp": "commonjs sharp",
+        "vntk": "commonjs vntk",
+        "crfsuite": "commonjs crfsuite",
+        "node-pre-gyp": "commonjs node-pre-gyp",
+        "fast-password-entropy": "commonjs fast-password-entropy",
       });
     }
 
@@ -20,6 +24,15 @@ const nextConfig: NextConfig = {
       ...config.resolve.alias,
       canvas: false,
     };
+
+    // Ignore HTML files in node_modules that webpack tries to parse
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    config.module.rules.push({
+      test: /\.html$/,
+      include: /node_modules/,
+      use: 'ignore-loader',
+    });
 
     // Handle fs dependency and other Node.js specific modules
     config.resolve.fallback = {
@@ -32,13 +45,16 @@ const nextConfig: NextConfig = {
       buffer: false,
       events: false,
       string_decoder: false,
+      'aws-sdk': false, // Prevent aws-sdk from being bundled for client-side
+      'node-pre-gyp': false, // Prevent node-pre-gyp from being bundled
     };
 
-    // Handle sharp and pdf2pic dependencies
+    // Additional externals for server-side only dependencies  
     if (isServer) {
       config.externals.push({
         'sharp': 'commonjs sharp',
-        'pdf2pic': 'commonjs pdf2pic'
+        'pdf2pic': 'commonjs pdf2pic',
+        'aws-sdk': 'commonjs aws-sdk', // Handle node-pre-gyp dependency
       });
     }
 
@@ -46,7 +62,7 @@ const nextConfig: NextConfig = {
   },
 
   // Enable experimental features for better compatibility
-  serverExternalPackages: ["pdf-parse", "pdf2pic", "sharp"],
+  serverExternalPackages: ["pdf-parse", "pdf2pic", "sharp", "vntk", "crfsuite", "node-pre-gyp", "fast-password-entropy"],
   
   // Handle image domains for processing
   images: {

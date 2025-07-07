@@ -41,7 +41,7 @@ export default function Home() {
                 AI Processing
               </CardTitle>
               <CardDescription>
-                Leverage Google's Gemini AI to intelligently parse and structure your documents
+                Leverage Google&apos;s Gemini AI to intelligently parse and structure your documents
               </CardDescription>
             </CardHeader>
             <CardContent>

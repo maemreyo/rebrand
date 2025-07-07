@@ -1,0 +1,526 @@
+hot-reloader-client.js:197 [Fast Refresh] rebuilding
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/info.js:14:1
+Module not found: Can't resolve 'aws-sdk'
+  12 |
+  13 | function unpublish(gyp, argv, callback) {
+> 14 |     var AWS = require("aws-sdk");
+     | ^
+  15 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  16 |     var opts = versioning.evaluate(package_json, gyp.opts);
+  17 |     s3_setup.detect(opts.hosted_path,config);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/crfsuite.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/publish.js:18:1
+Module not found: Can't resolve 'aws-sdk'
+  16 |
+  17 | function publish(gyp, argv, callback) {
+> 18 |     var AWS = require("aws-sdk");
+     | ^
+  19 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  20 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  21 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/crfsuite.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/unpublish.js:16:1
+Module not found: Can't resolve 'aws-sdk'
+  14 |
+  15 | function unpublish(gyp, argv, callback) {
+> 16 |     var AWS = require("aws-sdk");
+     | ^
+  17 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  18 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  19 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/crfsuite.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+> <!doctype html>
+| <html>
+| <head>
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/crfsuite.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+report-hmr-latency.js:14 [Fast Refresh] done in 1158ms
+report-hmr-latency.js:14 [Fast Refresh] done in 1990ms
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/info.js:14:1
+Module not found: Can't resolve 'aws-sdk'
+  12 |
+  13 | function unpublish(gyp, argv, callback) {
+> 14 |     var AWS = require("aws-sdk");
+     | ^
+  15 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  16 |     var opts = versioning.evaluate(package_json, gyp.opts);
+  17 |     s3_setup.detect(opts.hosted_path,config);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/publish.js:18:1
+Module not found: Can't resolve 'aws-sdk'
+  16 |
+  17 | function publish(gyp, argv, callback) {
+> 18 |     var AWS = require("aws-sdk");
+     | ^
+  19 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  20 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  21 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/unpublish.js:16:1
+Module not found: Can't resolve 'aws-sdk'
+  14 |
+  15 | function unpublish(gyp, argv, callback) {
+> 16 |     var AWS = require("aws-sdk");
+     | ^
+  17 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  18 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  19 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+> <!doctype html>
+| <html>
+| <head>
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/info.js:14:1
+Module not found: Can't resolve 'aws-sdk'
+  12 |
+  13 | function unpublish(gyp, argv, callback) {
+> 14 |     var AWS = require("aws-sdk");
+     | ^
+  15 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  16 |     var opts = versioning.evaluate(package_json, gyp.opts);
+  17 |     s3_setup.detect(opts.hosted_path,config);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/publish.js:18:1
+Module not found: Can't resolve 'aws-sdk'
+  16 |
+  17 | function publish(gyp, argv, callback) {
+> 18 |     var AWS = require("aws-sdk");
+     | ^
+  19 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  20 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  21 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/unpublish.js:16:1
+Module not found: Can't resolve 'aws-sdk'
+  14 |
+  15 | function unpublish(gyp, argv, callback) {
+> 16 |     var AWS = require("aws-sdk");
+     | ^
+  17 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  18 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  19 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+intercept-console-error.js:50 ./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+> <!doctype html>
+| <html>
+| <head>
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+error @ intercept-console-error.js:50
+handleErrors @ hot-reloader-client.js:162
+processMessage @ hot-reloader-client.js:220
+handler @ hot-reloader-client.js:473
+PdfUpload.tsx:185  POST http://localhost:3009/api/extract-pdf-ocr 500 (Internal Server Error)
+extractTextFromPdf @ PdfUpload.tsx:185
+PdfUpload.useCallback[onDrop] @ PdfUpload.tsx:147
+eval @ index.js:719
+eval @ index.js:743
+Promise.then
+eval @ index.js:738
+eval @ index.js:236
+eval @ index.js:234
+executeDispatch @ react-dom-client.development.js:16502
+runWithFiberInDEV @ react-dom-client.development.js:845
+processDispatchQueue @ react-dom-client.development.js:16552
+eval @ react-dom-client.development.js:17150
+batchedUpdates$1 @ react-dom-client.development.js:3263
+dispatchEventForPluginEventSystem @ react-dom-client.development.js:16706
+dispatchEvent @ react-dom-client.development.js:20816
+dispatchDiscreteEvent @ react-dom-client.development.js:20784
+<input>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+renderDropzone @ PdfUpload.tsx:324
+PdfUpload @ PdfUpload.tsx:630
+react-stack-bottom-frame @ react-dom-client.development.js:22974
+renderWithHooksAgain @ react-dom-client.development.js:6767
+renderWithHooks @ react-dom-client.development.js:6679
+updateFunctionComponent @ react-dom-client.development.js:8931
+beginWork @ react-dom-client.development.js:10556
+runWithFiberInDEV @ react-dom-client.development.js:845
+performUnitOfWork @ react-dom-client.development.js:15258
+workLoopSync @ react-dom-client.development.js:15078
+renderRootSync @ react-dom-client.development.js:15058
+performWorkOnRoot @ react-dom-client.development.js:14526
+performSyncWorkOnRoot @ react-dom-client.development.js:16365
+flushSyncWorkAcrossRoots_impl @ react-dom-client.development.js:16211
+processRootScheduleInMicrotask @ react-dom-client.development.js:16250
+eval @ react-dom-client.development.js:16384
+<PdfUpload>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:346
+renderInputTab @ page.tsx:401
+RebrandPage @ page.tsx:746
+react-stack-bottom-frame @ react-dom-client.development.js:22974
+renderWithHooksAgain @ react-dom-client.development.js:6767
+renderWithHooks @ react-dom-client.development.js:6679
+updateFunctionComponent @ react-dom-client.development.js:8931
+beginWork @ react-dom-client.development.js:10556
+runWithFiberInDEV @ react-dom-client.development.js:845
+performUnitOfWork @ react-dom-client.development.js:15258
+workLoopSync @ react-dom-client.development.js:15078
+renderRootSync @ react-dom-client.development.js:15058
+performWorkOnRoot @ react-dom-client.development.js:14526
+performSyncWorkOnRoot @ react-dom-client.development.js:16365
+flushSyncWorkAcrossRoots_impl @ react-dom-client.development.js:16211
+processRootScheduleInMicrotask @ react-dom-client.development.js:16250
+eval @ react-dom-client.development.js:16384
+PdfUpload.tsx:236 PDF extraction failed: Error: HTTP 500: Internal Server Error
+    at extractTextFromPdf (PdfUpload.tsx:194:15)
+    at async PdfUpload.useCallback[onDrop] (PdfUpload.tsx:147:7)
+error @ intercept-console-error.js:50
+extractTextFromPdf @ PdfUpload.tsx:236
+page.tsx:154 PDF upload error: HTTP 500: Internal Server Error
+error @ intercept-console-error.js:50
+handlePdfError @ page.tsx:154
+PdfUpload.useCallback[onDrop] @ PdfUpload.tsx:157
+fetch-server-response.js:163  GET http://localhost:3009/rebrand?_rsc=sz4wn 500 (Internal Server Error)
+createFetch @ fetch-server-response.js:163
+fetchServerResponse @ fetch-server-response.js:98
+hmrRefreshReducerImpl @ hmr-refresh-reducer.js:34
+clientReducer @ router-reducer.js:41
+action @ app-router-instance.js:156
+runAction @ app-router-instance.js:66
+dispatchAction @ app-router-instance.js:120
+dispatch @ app-router-instance.js:154
+eval @ use-action-queue.js:55
+startTransition @ react-dom-client.development.js:7843
+dispatch @ use-action-queue.js:54
+dispatchAppRouterAction @ use-action-queue.js:37
+eval @ app-router-instance.js:274
+exports.startTransition @ react.development.js:1129
+hmrRefresh @ app-router-instance.js:273
+processMessage @ hot-reloader-client.js:318
+handler @ hot-reloader-client.js:473
+fetch-server-response.js:163  GET http://localhost:3009/rebrand?_rsc=sz4wn 500 (Internal Server Error)
+createFetch @ fetch-server-response.js:163
+fetchServerResponse @ fetch-server-response.js:98
+hmrRefreshReducerImpl @ hmr-refresh-reducer.js:34
+clientReducer @ router-reducer.js:41
+action @ app-router-instance.js:156
+runAction @ app-router-instance.js:66
+runRemainingActions @ app-router-instance.js:44
+handleResult @ app-router-instance.js:73
+  GET http://localhost:3009/rebrand 500 (Internal Server Error)
+Router @ webpack-internal:///…s/app-router.js:266
+react-stack-bottom-frame @ webpack-internal:///…evelopment.js:22974
+renderWithHooks @ webpack-internal:///…development.js:6667
+updateFunctionComponent @ webpack-internal:///…development.js:8931
+beginWork @ webpack-internal:///…evelopment.js:10556
+runWithFiberInDEV @ webpack-internal:///….development.js:845
+performUnitOfWork @ webpack-internal:///…evelopment.js:15258
+workLoopConcurrentByScheduler @ webpack-internal:///…evelopment.js:15252
+renderRootConcurrent @ webpack-internal:///…evelopment.js:15227
+performWorkOnRoot @ webpack-internal:///…evelopment.js:14525
+performWorkOnRootViaSchedulerTask @ webpack-internal:///…evelopment.js:16350
+performWorkUntilDeadline @ webpack-internal:///…r.development.js:45
+Navigated to http://localhost:3009/rebrand
+main.js:2533 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+index.js:644 Uncaught Error: Module not found: Can't resolve 'aws-sdk'
+  12 |
+  13 | function unpublish(gyp, argv, callback) {
+> 14 |     var AWS = require("aws-sdk");
+     | ^
+  15 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  16 |     var opts = versioning.evaluate(package_json, gyp.opts);
+  17 |     s3_setup.detect(opts.hosted_path,config);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+    at <unknown> (nextjs.org/docs/messages/module-not-found)
+    at getNotFoundError (/Users/matthewngo/Documents/dev/projects/rebrand/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/parseNotFoundError.js:135:16)
+    at async getModuleBuildError (/Users/matthewngo/Documents/dev/projects/rebrand/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/webpackModuleError.js:103:27)
+    at async (/Users/matthewngo/Documents/dev/projects/rebrand/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:29:49)
+    at async (/Users/matthewngo/Documents/dev/projects/rebrand/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:27:21)
+getServerError @ node-stack-frames.js:49
+eval @ index.js:644
+setTimeout
+hydrate @ index.js:622
+await in hydrate
+pageBootstrap @ page-bootstrap.js:29
+eval @ next-dev.js:24
+Promise.then
+eval @ next-dev.js:22
+(pages-dir-browser)/./node_modules/next/dist/client/next-dev.js @ main.js:1447
+options.factory @ webpack.js:675
+__webpack_require__ @ webpack.js:37
+__webpack_exec__ @ main.js:2658
+(anonymous) @ main.js:2659
+webpackJsonpCallback @ webpack.js:1351
+(anonymous) @ main.js:9
+websocket.js:42 [HMR] connected
+client.js:82 ./node_modules/node-pre-gyp/lib/info.js:14:1
+Module not found: Can't resolve 'aws-sdk'
+  12 |
+  13 | function unpublish(gyp, argv, callback) {
+> 14 |     var AWS = require("aws-sdk");
+     | ^
+  15 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  16 |     var opts = versioning.evaluate(package_json, gyp.opts);
+  17 |     s3_setup.detect(opts.hosted_path,config);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+nextJsHandleConsoleError @ client.js:82
+handleErrors @ hot-reloader-client.js:163
+processMessage @ hot-reloader-client.js:224
+eval @ hot-reloader-client.js:71
+handleMessage @ websocket.js:65
+client.js:82 ./node_modules/node-pre-gyp/lib/publish.js:18:1
+Module not found: Can't resolve 'aws-sdk'
+  16 |
+  17 | function publish(gyp, argv, callback) {
+> 18 |     var AWS = require("aws-sdk");
+     | ^
+  19 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  20 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  21 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+nextJsHandleConsoleError @ client.js:82
+handleErrors @ hot-reloader-client.js:163
+processMessage @ hot-reloader-client.js:224
+eval @ hot-reloader-client.js:71
+handleMessage @ websocket.js:65
+client.js:82 ./node_modules/node-pre-gyp/lib/unpublish.js:16:1
+Module not found: Can't resolve 'aws-sdk'
+  14 |
+  15 | function unpublish(gyp, argv, callback) {
+> 16 |     var AWS = require("aws-sdk");
+     | ^
+  17 |     var package_json = JSON.parse(fs.readFileSync('./package.json'));
+  18 |     var napi_build_version = napi.get_napi_build_version_from_command_args(argv);
+  19 |     var opts = versioning.evaluate(package_json, gyp.opts, napi_build_version);
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/node-pre-gyp/lib/ sync ^\.\/.*$
+./node_modules/node-pre-gyp/lib/node-pre-gyp.js
+./node_modules/crfsuite/index.js
+./node_modules/vntk/lib/word_tokenizer/index.js
+./node_modules/vntk/lib/vntk.js
+./node_modules/vntk/index.js
+./src/lib/utils/text-validation.ts
+./src/app/api/extract-pdf-ocr/route.ts
+nextJsHandleConsoleError @ client.js:82
+handleErrors @ hot-reloader-client.js:163
+processMessage @ hot-reloader-client.js:224
+eval @ hot-reloader-client.js:71
+handleMessage @ websocket.js:65
+client.js:82 ./node_modules/node-pre-gyp/lib/util/nw-pre-gyp/index.html
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+> <!doctype html>
+| <html>
+| <head>
+nextJsHandleConsoleError @ client.js:82
+handleErrors @ hot-reloader-client.js:163
+processMessage @ hot-reloader-client.js:224
+eval @ hot-reloader-client.js:71
+handleMessage @ websocket.js:65
