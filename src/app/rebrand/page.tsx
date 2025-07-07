@@ -11,6 +11,7 @@ import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 
 import { useDocumentProcessing } from '@/hooks/useDocumentProcessing';
+import { PdfUpload } from '@/components/PdfUpload';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -76,6 +77,7 @@ export default function RebrandPage() {
 
   // Local state for UI
   const [activeTab, setActiveTab] = useState<'input' | 'editor' | 'preview'>('input');
+  const [inputMode, setInputMode] = useState<'text' | 'pdf'>('text');
   const [processingOptions, setProcessingOptions] = useState({
     language: 'en',
     documentType: 'other' as const,
@@ -135,6 +137,22 @@ export default function RebrandPage() {
     await processText(rawText, processingOptions);
   };
 
+  const handlePdfTextExtracted = async (text: string, metadata?: any) => {
+    // Set the extracted text
+    setRawText(text);
+    
+    // Auto-process the extracted text
+    await processText(text, processingOptions);
+    
+    // Switch to editor tab
+    setActiveTab('editor');
+  };
+
+  const handlePdfError = (error: string) => {
+    // Error is handled by the PdfUpload component
+    console.error('PDF upload error:', error);
+  };
+
   const handleGeneratePdf = async () => {
     await generatePdf({
       templateId: selectedTemplate?.id,
@@ -145,6 +163,7 @@ export default function RebrandPage() {
   const handleClearAll = () => {
     clearDocument();
     setActiveTab('input');
+    setInputMode('text');
     if (editor) {
       editor.commands.clearContent();
     }
@@ -243,102 +262,228 @@ export default function RebrandPage() {
 
   const renderInputTab = () => (
     <div className="space-y-6">
+      {/* Input Mode Selector */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Upload className="h-5 w-5" />
-            Input Your Text
+            Choose Input Method
           </CardTitle>
           <CardDescription>
-            Paste your raw text here. Our AI will analyze and structure it automatically.
+            Select how you want to provide your document content
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea
-            placeholder="Paste your document text here..."
-            value={rawText}
-            onChange={(e) => setRawText(e.target.value)}
-            rows={12}
-            className="min-h-[300px]"
-          />
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Label htmlFor="document-type">Document Type</Label>
-              <Select
-                value={processingOptions.documentType}
-                onValueChange={(value: any) => 
-                  setProcessingOptions(prev => ({ ...prev, documentType: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="report">Report</SelectItem>
-                  <SelectItem value="article">Article</SelectItem>
-                  <SelectItem value="form">Form</SelectItem>
-                  <SelectItem value="contract">Contract</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="flex-1">
-              <Label htmlFor="language">Language</Label>
-              <Select
-                value={processingOptions.language}
-                onValueChange={(value) => 
-                  setProcessingOptions(prev => ({ ...prev, language: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="vi">Vietnamese</SelectItem>
-                  <SelectItem value="fr">French</SelectItem>
-                  <SelectItem value="de">German</SelectItem>
-                  <SelectItem value="es">Spanish</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <CardContent>
+          <div className="flex space-x-4">
+            <Button
+              variant={inputMode === 'text' ? 'default' : 'outline'}
+              onClick={() => setInputMode('text')}
+              className="flex-1"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Paste Text
+            </Button>
+            <Button
+              variant={inputMode === 'pdf' ? 'default' : 'outline'}
+              onClick={() => setInputMode('pdf')}
+              className="flex-1"
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              Upload PDF
+            </Button>
           </div>
+        </CardContent>
+      </Card>
 
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="enable-fallback"
-              checked={processingOptions.enableFallback}
-              onCheckedChange={(checked) =>
-                setProcessingOptions(prev => ({ ...prev, enableFallback: checked }))
-              }
+      {/* Text Input Mode */}
+      {inputMode === 'text' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Paste Your Text
+            </CardTitle>
+            <CardDescription>
+              Paste your raw text here. Our AI will analyze and structure it automatically.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Textarea
+              placeholder="Paste your document text here..."
+              value={rawText}
+              onChange={(e) => setRawText(e.target.value)}
+              rows={12}
+              className="min-h-[300px]"
             />
-            <Label htmlFor="enable-fallback">Enable fallback processing</Label>
-          </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <Label htmlFor="document-type">Document Type</Label>
+                <Select
+                  value={processingOptions.documentType}
+                  onValueChange={(value: any) => 
+                    setProcessingOptions(prev => ({ ...prev, documentType: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="report">Report</SelectItem>
+                    <SelectItem value="article">Article</SelectItem>
+                    <SelectItem value="form">Form</SelectItem>
+                    <SelectItem value="contract">Contract</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex-1">
+                <Label htmlFor="language">Language</Label>
+                <Select
+                  value={processingOptions.language}
+                  onValueChange={(value) => 
+                    setProcessingOptions(prev => ({ ...prev, language: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="vi">Vietnamese</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-          <div className="flex space-x-2">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="enable-fallback"
+                checked={processingOptions.enableFallback}
+                onCheckedChange={(checked) =>
+                  setProcessingOptions(prev => ({ ...prev, enableFallback: checked }))
+                }
+              />
+              <Label htmlFor="enable-fallback">Enable fallback processing</Label>
+            </div>
+
+            <div className="flex space-x-2">
+              <Button
+                onClick={handleProcessText}
+                disabled={!rawText.trim() || isAnalyzing}
+                className="flex-1"
+              >
+                {isAnalyzing ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Zap className="h-4 w-4 mr-2" />
+                )}
+                Process Text with AI
+              </Button>
+              
+              {(canonicalDocument || tiptapContent) && (
+                <Button variant="outline" onClick={handleClearAll}>
+                  Clear All
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* PDF Upload Mode */}
+      {inputMode === 'pdf' && (
+        <PdfUpload
+          onTextExtracted={handlePdfTextExtracted}
+          onError={handlePdfError}
+          disabled={isAnalyzing}
+        />
+      )}
+
+      {/* Processing Options for PDF Mode */}
+      {inputMode === 'pdf' && rawText && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Processing Options</CardTitle>
+            <CardDescription>
+              Configure how the extracted text should be processed
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <Label htmlFor="document-type-pdf">Document Type</Label>
+                <Select
+                  value={processingOptions.documentType}
+                  onValueChange={(value: any) => 
+                    setProcessingOptions(prev => ({ ...prev, documentType: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="report">Report</SelectItem>
+                    <SelectItem value="article">Article</SelectItem>
+                    <SelectItem value="form">Form</SelectItem>
+                    <SelectItem value="contract">Contract</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex-1">
+                <Label htmlFor="language-pdf">Language</Label>
+                <Select
+                  value={processingOptions.language}
+                  onValueChange={(value) => 
+                    setProcessingOptions(prev => ({ ...prev, language: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="vi">Vietnamese</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="enable-fallback-pdf"
+                checked={processingOptions.enableFallback}
+                onCheckedChange={(checked) =>
+                  setProcessingOptions(prev => ({ ...prev, enableFallback: checked }))
+                }
+              />
+              <Label htmlFor="enable-fallback-pdf">Enable fallback processing</Label>
+            </div>
+
             <Button
               onClick={handleProcessText}
               disabled={!rawText.trim() || isAnalyzing}
-              className="flex-1"
+              className="w-full"
             >
               {isAnalyzing ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
                 <Zap className="h-4 w-4 mr-2" />
               )}
-              Process Text with AI
+              Process Extracted Text with AI
             </Button>
-            
-            {(canonicalDocument || tiptapContent) && (
-              <Button variant="outline" onClick={handleClearAll}>
-                Clear All
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 
@@ -576,8 +721,8 @@ export default function RebrandPage() {
         <Tabs value={activeTab} onValueChange={(value: any) => setActiveTab(value)}>
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="input" className="flex items-center gap-2">
-              <Upload className="h-4 w-4" />
-              Input Text
+              {inputMode === 'text' ? <FileText className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
+              {inputMode === 'text' ? 'Paste Text' : 'Upload PDF'}
             </TabsTrigger>
             <TabsTrigger 
               value="editor" 
