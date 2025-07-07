@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { JSONContent } from '@tiptap/core';
-import { generate } from '@pdfme/generator';
-import { TiptapToPdfmeAdapter } from '@/lib/adapters/tiptap-to-pdfme';
-import { getTemplateById } from '@/app/api/templates/route';
-import { 
-  Template, 
-  PdfGenerationError, 
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { JSONContent } from "@tiptap/core";
+import { generate } from "@pdfme/generator";
+import { TiptapToPdfmeAdapter } from "@/lib/adapters/tiptap-to-pdfme";
+import { getTemplateById } from "@/app/api/templates/route";
+import {
+  Template,
   validateTemplate,
-  createBasicTextTemplate 
-} from '@/types/template';
+  createBasicTextTemplate,
+} from "@/types/template";
+import { BLANK_A4_PDF } from "@pdfme/common";
 
 // =============================================================================
 // Request Schema
@@ -19,13 +19,15 @@ const ExportPdfRequestSchema = z.object({
   tiptapJson: z.any(), // JSONContent from Tiptap
   templateId: z.string().optional(),
   customTemplate: z.any().optional(), // Custom template JSON
-  options: z.object({
-    filename: z.string().default('document.pdf'),
-    pageSize: z.enum(['A4', 'LETTER', 'A3']).default('A4'),
-    margin: z.number().min(5).max(50).default(20),
-    font: z.string().default('NotoSansCJK-Regular'),
-    fontSize: z.number().min(8).max(24).default(12),
-  }).optional(),
+  options: z
+    .object({
+      filename: z.string().default("document.pdf"),
+      pageSize: z.enum(["A4", "LETTER", "A3"]).default("A4"),
+      margin: z.number().min(5).max(50).default(20),
+      font: z.string().default("NotoSansCJK-Regular"),
+      fontSize: z.number().min(8).max(24).default(12),
+    })
+    .optional(),
 });
 
 interface ExportPdfResponse {
@@ -50,38 +52,39 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // Parse and validate request body
     const body = await request.json().catch(() => null);
-    
+
     if (!body) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid JSON in request body',
+          error: "Invalid JSON in request body",
         },
         { status: 400 }
       );
     }
 
     const validationResult = ExportPdfRequestSchema.safeParse(body);
-    
+
     if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid request format',
+          error: "Invalid request format",
           details: validationResult.error.errors,
         },
         { status: 400 }
       );
     }
 
-    const { tiptapJson, templateId, customTemplate, options } = validationResult.data;
+    const { tiptapJson, templateId, customTemplate, options } =
+      validationResult.data;
 
     // Validate Tiptap JSON structure
-    if (!tiptapJson || !tiptapJson.type || tiptapJson.type !== 'doc') {
+    if (!tiptapJson || !tiptapJson.type || tiptapJson.type !== "doc") {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid Tiptap JSON structure',
+          error: "Invalid Tiptap JSON structure",
         },
         { status: 400 }
       );
@@ -89,7 +92,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Get or create template
     let template: Template;
-    
+
     if (customTemplate) {
       // Use custom template
       try {
@@ -98,8 +101,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json(
           {
             success: false,
-            error: 'Invalid custom template',
-            details: error instanceof Error ? error.message : 'Template validation failed',
+            error: "Invalid custom template",
+            details:
+              error instanceof Error
+                ? error.message
+                : "Template validation failed",
           },
           { status: 400 }
         );
@@ -111,7 +117,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json(
           {
             success: false,
-            error: 'Template not found',
+            error: "Template not found",
           },
           { status: 404 }
         );
@@ -126,21 +132,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     let pdfmeDocument;
     try {
       const adapter = new TiptapToPdfmeAdapter({
-        pageWidth: getPageDimensions(options?.pageSize || 'A4').width,
-        pageHeight: getPageDimensions(options?.pageSize || 'A4').height,
+        pageWidth: getPageDimensions(options?.pageSize || "A4").width,
+        pageHeight: getPageDimensions(options?.pageSize || "A4").height,
         margin: options?.margin || 20,
-        defaultFont: options?.font || 'NotoSansCJK-Regular',
+        defaultFont: options?.font || "NotoSansCJK-Regular",
         defaultFontSize: options?.fontSize || 12,
       });
 
       pdfmeDocument = adapter.transform(tiptapJson);
     } catch (error) {
-      console.error('Tiptap to pdfme transformation failed:', error);
+      console.error("Tiptap to pdfme transformation failed:", error);
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to transform document for PDF generation',
-          details: error instanceof Error ? error.message : 'Transformation failed',
+          error: "Failed to transform document for PDF generation",
+          details:
+            error instanceof Error ? error.message : "Transformation failed",
         },
         { status: 500 }
       );
@@ -151,25 +158,34 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       // If we have content from Tiptap, use the generated template and inputs
       // Otherwise, use the provided template with empty inputs
-      const finalTemplate = pdfmeDocument.template.schemas[0].length > 0 
-        ? pdfmeDocument.template 
-        : template;
-      
-      const finalInputs = pdfmeDocument.inputs.length > 0 && Object.keys(pdfmeDocument.inputs[0]).length > 0
-        ? pdfmeDocument.inputs
-        : [{}];
+      const templateToUse =
+        pdfmeDocument.template.schemas[0].length > 0
+          ? pdfmeDocument.template
+          : template;
+
+      const finalTemplateForPdfme = {
+        ...templateToUse,
+        basePdf: templateToUse.basePdf || BLANK_A4_PDF, // Ensure basePdf is always defined
+      };
+
+      const finalInputs =
+        pdfmeDocument.inputs.length > 0 &&
+        Object.keys(pdfmeDocument.inputs[0]).length > 0
+          ? pdfmeDocument.inputs
+          : [{}];
 
       pdfBuffer = await generate({
-        template: finalTemplate,
+        template: finalTemplateForPdfme,
         inputs: finalInputs,
       });
     } catch (error) {
-      console.error('PDF generation failed:', error);
+      console.error("PDF generation failed:", error);
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to generate PDF',
-          details: error instanceof Error ? error.message : 'PDF generation failed',
+          error: "Failed to generate PDF",
+          details:
+            error instanceof Error ? error.message : "PDF generation failed",
         },
         { status: 500 }
       );
@@ -181,30 +197,32 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const pageCount = estimatePageCount(pdfSize);
 
     // Return PDF as response
-    const filename = options?.filename || 'document.pdf';
-    
+    const filename = options?.filename || "document.pdf";
+
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Length': pdfSize.toString(),
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'X-Generation-Time': generationTime.toString(),
-        'X-PDF-Size': pdfSize.toString(),
-        'X-Page-Count': pageCount.toString(),
+        "Content-Type": "application/pdf",
+        "Content-Length": pdfSize.toString(),
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        "X-Generation-Time": generationTime.toString(),
+        "X-PDF-Size": pdfSize.toString(),
+        "X-Page-Count": pageCount.toString(),
       },
     });
-
   } catch (error) {
-    console.error('Unexpected error in export-pdf endpoint:', error);
+    console.error("Unexpected error in export-pdf endpoint:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error',
-        details: process.env.NODE_ENV === 'development' 
-          ? (error instanceof Error ? error.message : 'Unknown error')
-          : undefined,
+        error: "Internal server error",
+        details:
+          process.env.NODE_ENV === "development"
+            ? error instanceof Error
+              ? error.message
+              : "Unknown error"
+            : undefined,
       },
       { status: 500 }
     );
@@ -220,18 +238,20 @@ async function generatePdfAsBase64(
   templateId?: string,
   customTemplate?: Template,
   options?: any
-): Promise<{ success: true; data: string } | { success: false; error: string }> {
+): Promise<
+  { success: true; data: string } | { success: false; error: string }
+> {
   try {
     // Similar logic as above but return base64 string instead of binary response
-    
+
     let template: Template;
-    
+
     if (customTemplate) {
       template = validateTemplate(customTemplate);
     } else if (templateId) {
       const templateData = await getTemplateById(templateId);
       if (!templateData) {
-        return { success: false, error: 'Template not found' };
+        return { success: false, error: "Template not found" };
       }
       template = templateData.template_json;
     } else {
@@ -241,27 +261,35 @@ async function generatePdfAsBase64(
     const adapter = new TiptapToPdfmeAdapter(options);
     const pdfmeDocument = adapter.transform(tiptapJson);
 
-    const finalTemplate = pdfmeDocument.template.schemas[0].length > 0 
-      ? pdfmeDocument.template 
-      : template;
-    
-    const finalInputs = pdfmeDocument.inputs.length > 0 && Object.keys(pdfmeDocument.inputs[0]).length > 0
-      ? pdfmeDocument.inputs
-      : [{}];
+    const finalTemplate =
+      pdfmeDocument.template.schemas[0].length > 0
+        ? pdfmeDocument.template
+        : template;
+
+    const finalInputs =
+      pdfmeDocument.inputs.length > 0 &&
+      Object.keys(pdfmeDocument.inputs[0]).length > 0
+        ? pdfmeDocument.inputs
+        : [{}];
+
+    const finalTemplateForPdfme = {
+      ...finalTemplate,
+      basePdf: finalTemplate.basePdf || BLANK_A4_PDF, // Ensure basePdf is always defined
+    };
 
     const pdfBuffer = await generate({
-      template: finalTemplate,
+      template: finalTemplateForPdfme,
       inputs: finalInputs,
     });
 
     // Convert to base64
-    const base64 = Buffer.from(pdfBuffer).toString('base64');
-    
+    const base64 = Buffer.from(pdfBuffer).toString("base64");
+
     return { success: true, data: base64 };
   } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'PDF generation failed' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "PDF generation failed",
     };
   }
 }
@@ -274,20 +302,20 @@ export async function GET(): Promise<NextResponse> {
   try {
     return NextResponse.json(
       {
-        status: 'ok',
-        endpoint: 'export-pdf',
+        status: "ok",
+        endpoint: "export-pdf",
         timestamp: new Date().toISOString(),
-        version: '1.0.0',
-        supportedFormats: ['pdf'],
-        supportedPageSizes: ['A4', 'LETTER', 'A3'],
+        version: "1.0.0",
+        supportedFormats: ["pdf"],
+        supportedPageSizes: ["A4", "LETTER", "A3"],
       },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
       {
-        status: 'error',
-        error: 'Health check failed',
+        status: "error",
+        error: "Health check failed",
       },
       { status: 500 }
     );
@@ -301,13 +329,16 @@ export async function GET(): Promise<NextResponse> {
 /**
  * Get page dimensions for different page sizes
  */
-function getPageDimensions(pageSize: 'A4' | 'LETTER' | 'A3'): { width: number; height: number } {
+function getPageDimensions(pageSize: "A4" | "LETTER" | "A3"): {
+  width: number;
+  height: number;
+} {
   const dimensions = {
     A4: { width: 210, height: 297 },
     LETTER: { width: 216, height: 279 },
     A3: { width: 297, height: 420 },
   };
-  
+
   return dimensions[pageSize];
 }
 
@@ -332,9 +363,9 @@ function validateFileSize(size: number): boolean {
  */
 function generateSafeFilename(filename: string): string {
   return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_')
-    .replace(/_{2,}/g, '_')
-    .replace(/^_|_$/g, '');
+    .replace(/[^a-zA-Z0-9.-]/g, "_")
+    .replace(/_{2,}/g, "_")
+    .replace(/^_|_$/g, "");
 }
 
 /**
@@ -345,8 +376,10 @@ function logPdfGeneration(
   pageCount: number,
   generationTime: number
 ): void {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[PDF-EXPORT] Generated ${pageCount} pages, ${size} bytes in ${generationTime}ms`);
+  if (process.env.NODE_ENV === "development") {
+    console.log(
+      `[PDF-EXPORT] Generated ${pageCount} pages, ${size} bytes in ${generationTime}ms`
+    );
   }
 }
 

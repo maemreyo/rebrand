@@ -134,7 +134,7 @@ export interface OcrServiceConfig {
 
 export interface Pdf2PicOptions {
   density: number;
-  format: 'png' | 'jpg';
+  format: 'png' | 'jpg' | 'jpeg';
   width: number;
   height: number;
   quality?: number;

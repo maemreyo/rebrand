@@ -194,7 +194,7 @@ export class HybridPdfProcessor {
         } else {
           return {
             type: "scan_or_hybrid",
-            content: null,
+            content: undefined,
             numpages: data.numpages,
             reason: "Legacy length check failed",
           };
@@ -229,7 +229,7 @@ export class HybridPdfProcessor {
         this.validationStats.ocrTriggeredByValidation++;
         return {
           type: "scan_or_hybrid",
-          content: null,
+          content: undefined, // Changed from null to undefined
           numpages: data.numpages,
           reason: validationResult.reason,
           validationResult,

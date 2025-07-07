@@ -251,7 +251,7 @@ export default function RebrandPage() {
             </div>
             <div>
               <p className="text-muted-foreground">Confidence</p>
-              <Badge variant={processingMetadata.confidenceScore > 0.8 ? 'default' : 'secondary'}>
+              <Badge variant={processingMetadata.confidenceScore && processingMetadata.confidenceScore > 0.8 ? 'default' : 'secondary'}>
                 {Math.round((processingMetadata.confidenceScore || 0) * 100)}%
               </Badge>
             </div>
