@@ -6,146 +6,179 @@ Tài liệu này không chỉ giải quyết vấn đề ban đầu mà còn tí
 
 ### 1. Bối Cảnh và Vấn Đề
 
-Hệ thống xử lý PDF hiện tại (v1.0) sử dụng một logic đơn giản để quyết định khi nào cần kích hoạt OCR: kiểm tra độ dài của văn bản trích xuất được. Cụ thể, nếu `text.length > 50`, hệ thống giả định đó là một file PDF dạng văn bản (text-based) và bỏ qua bước OCR.
-
-**Vấn đề cốt lõi:** Logic này đã bị "đánh lừa" bởi các file PDF chứa các chuỗi vô nghĩa nhưng có độ dài lớn, chẳng hạn như các dòng dấu chấm (`.......`). Điều này dẫn đến việc hệ thống phân loại sai một file PDF dạng ảnh thành dạng văn bản, trả về nội dung rác và không bao giờ thực hiện OCR, khiến quá trình trích xuất thông tin thất bại hoàn toàn.
+Hệ thống xử lý PDF hiện tại (v1.0) sử dụng một logic đơn giản dựa trên độ dài văn bản (`text.length > 50`) để quyết định khi nào cần kích hoạt OCR. Logic này đã bị "đánh lừa" bởi các file PDF chứa các chuỗi vô nghĩa (ví dụ: `.......`), dẫn đến việc bỏ sót OCR và trả về nội dung không chính xác.
 
 ### 2. Phân Tích Nguyên Nhân Gốc Rễ
 
-Vấn đề không nằm ở việc triển khai mà ở chính chiến lược tiếp cận:
-
-*   **Kiểm tra dựa trên SỐ LƯỢNG (Quantity), không phải CHẤT LƯỢNG (Quality):** Hệ thống chỉ quan tâm "có bao nhiêu ký tự" mà không hiểu "ký tự đó có mang ý nghĩa hay không".
-*   **Thiếu khả năng nhận diện mẫu (Pattern Detection):** Hệ thống không được trang bị để phát hiện các mẫu dữ liệu vô nghĩa, lặp đi lặp lại.
+Vấn đề cốt lõi là hệ thống chỉ kiểm tra **SỐ LƯỢNG** (Quantity) mà không đánh giá **CHẤT LƯỢNG** (Quality) của văn bản.
 
 ### 3. Giải Pháp Kỹ Thuật: Hệ Thống Xác Thực Chất Lượng Văn Bản
 
-Để giải quyết triệt để, chúng ta sẽ thay thế logic kiểm tra độ dài đơn thuần bằng một **module xác thực chất lượng văn bản thông minh**. Module này sẽ phân tích nội dung văn bản được trích xuất và đưa ra một **điểm số tin cậy (Confidence Score)**, thay vì một quyết định `true/false` cứng nhắc.
-
-Luồng xử lý mới sẽ như sau:
-1.  Trích xuất văn bản thô từ một trang/file PDF.
-2.  Đưa văn bản thô qua **Module Xác Thực Chất Lượng**.
-3.  Module trả về một điểm tin cậy (ví dụ: `0.85`).
-4.  Hệ thống so sánh điểm này với một ngưỡng có thể cấu hình (`OCR_TRIGGER_CONFIDENCE_THRESHOLD`).
-    *   Nếu `confidence > threshold`, coi đây là văn bản hợp lệ.
-    *   Nếu `confidence <= threshold`, kích hoạt luồng OCR.
+Chúng ta sẽ thay thế logic cũ bằng một **module xác thực chất lượng văn bản thông minh**. Module này sẽ phân tích nội dung và đưa ra một **điểm số tin cậy (Confidence Score)**. Nếu điểm số thấp hơn một ngưỡng nhất định, hệ thống sẽ kích hoạt OCR.
 
 ### 4. Thiết Kế Chi Tiết và Kế Hoạch Triển Khai
 
-#### **Giai đoạn 1: Xây dựng Module Xác thực Chất lượng Văn bản (`text-validation.ts`)**
+**Chiến lược cốt lõi:** Triển khai theo 2 giai đoạn để tối ưu nguồn lực và thời gian.
+*   **Giai đoạn 1 (Hiện tại):** Xây dựng một hệ thống **Xác thực dựa trên Quy tắc Heuristic**. Giải pháp này nhanh, chi phí thấp, và hiệu quả để giải quyết vấn đề trước mắt.
+*   **Giai đoạn 2 (Tương lai):** Nâng cấp hệ thống bằng **Mô hình Học máy (ML)** để phát hiện văn bản rác (Gibberish Detection) nhằm đạt độ chính xác cao nhất.
 
-Đây là trái tim của giải pháp. Module sẽ export một hàm chính: `validateTextQuality`.
+---
+
+### **Giai đoạn 1: Xác thực dựa trên Quy tắc Heuristic (Heuristic Rule-based Validation)**
+
+#### **Bước 1: Lựa chọn và Cài đặt các Thư viện**
+
+Chúng ta sẽ chỉ sử dụng các thư viện cần thiết cho việc tính toán các chỉ số cơ bản:
+
+1.  **Tính toán Entropy (Độ ngẫu nhiên):**
+    *   **Package:** `fast-password-entropy`
+2.  **Phân tích Tiếng Việt (Đếm "tiếng"):**
+    *   **Package:** `vntk`
+
+**Lệnh cài đặt:**
+```bash
+pnpm install fast-password-entropy vntk
+```
+
+#### **Bước 2: Xây dựng Module `text-validation.ts`**
+
+Module sẽ tính toán các chỉ số và áp dụng một bộ quy tắc để đưa ra điểm tin cậy.
 
 **Input:** `text: string`
 **Output:** `TextValidationResult`
 
 ```typescript
-// /src/types/ocr.ts
+// /src/types/ocr.ts (cập nhật)
 interface TextValidationResult {
-  confidence: number; // Điểm tin cậy từ 0.0 đến 1.0
-  isValid: boolean;     // Kết quả cuối cùng dựa trên ngưỡng
-  reason: string;       // Lý do đưa ra kết luận (hữu ích cho việc debug)
+  confidence: number;
+  isValid: boolean;
+  reason: string;
   metrics: {
-    normalizedLength: number;
-    syllableCount: number;    // Đếm "tiếng" cho tiếng Việt
-    uniqueChars: number;
+    charLength: number;
+    syllableCount: number;
+    syllableDensity: number; // Metric mới, rất quan trọng
     entropy: number;
   };
-}```
+}
 
-**Các bước xử lý bên trong `validateTextQuality`:**
+// /src/lib/utils/text-validation.ts (Logic Heuristic)
+import { stringEntropy } from 'fast-password-entropy';
+import { wordTokenizer } from 'vntk';
 
-1.  **Chuẩn Hóa Unicode (Cực kỳ quan trọng cho Tiếng Việt):**
-    *   **Hành động:** Chuẩn hóa chuỗi đầu vào về dạng NFC (Precomposed).
-    *   **Lý do:** Đảm bảo tính nhất quán và loại bỏ lỗi so sánh/tính toán do các cách biểu diễn ký tự khác nhau.
-    *   **Code:** `const normalizedText = text.normalize('NFC');`
+export function validateTextQuality(text: string): TextValidationResult {
+  const normalizedText = text.normalize('NFC').trim();
+  const charLength = normalizedText.length;
 
-2.  **Tính Toán Các Metric:**
-    *   **Syllable Count (Thay cho Word Count):**
-        *   **Hành động:** Sử dụng Regex hỗ trợ Unicode để đếm các "tiếng" (chuỗi ký tự chữ/số).
-        *   **Lý do:** Regex `/\s+/` không đúng cho tiếng Việt. Cách tiếp cận này thực tế và đủ tốt cho bài toán phân loại.
-        *   **Code:** `const syllables = normalizedText.match(/[\p{L}\p{N}]{2,}/gu) || []; const syllableCount = syllables.length;`
-    *   **Unique Characters:**
-        *   **Hành động:** Đếm số lượng ký tự duy nhất.
-        *   **Lý do:** Giúp phát hiện các chuỗi lặp lại như `........`.
-        *   **Code:** `const uniqueChars = new Set(normalizedText).size;`
-    *   **Entropy (Tính ngẫu nhiên/hỗn loạn):**
-        *   **Hành động:** Tính toán entropy Shannon của chuỗi.
-        *   **Lý do:** Văn bản thực sự có entropy cao hơn các chuỗi lặp lại. Một hàm tính entropy chuẩn sẽ được triển khai.
+  if (charLength < OCR_CONFIG.MIN_ABSOLUTE_LENGTH) {
+    // Trả về không hợp lệ nếu quá ngắn
+  }
 
-3.  **Tính Toán Điểm Tin Cậy (Confidence Score):**
-    *   **Hành động:** Áp dụng một công thức có trọng số dựa trên các metric và các ngưỡng cấu hình để ra một điểm số từ 0.0 đến 1.0. Đây là logic cốt lõi cần được tinh chỉnh qua thực tế.
-    *   **Ví dụ logic:** Bắt đầu với điểm 1.0, trừ điểm nếu vi phạm các ngưỡng. Ví dụ: nếu `syllableCount < MIN_SYLLABLE_COUNT`, trừ `0.4` điểm; nếu `uniqueChars < MIN_UNIQUE_CHARS`, trừ `0.5` điểm, v.v.
+  const syllableCount = wordTokenizer().tag(normalizedText).length;
+  const entropy = stringEntropy(normalizedText);
+  const syllableDensity = charLength > 0 ? syllableCount / charLength : 0;
 
-#### **Giai đoạn 2: Cập nhật Cấu hình Hệ thống**
+  // Áp dụng bộ quy tắc để tính điểm tin cậy
+  let confidence = 1.0;
+  let reason = "Valid text";
 
-Bổ sung các biến môi trường hoặc hằng số cấu hình mới để hệ thống linh hoạt.
+  // QUY TẮC 1: Mật độ "tiếng" quá thấp -> Dấu hiệu rõ nhất của văn bản rác
+  if (syllableDensity < OCR_CONFIG.MIN_SYLLABLE_DENSITY) {
+    return { confidence: 0, isValid: false, reason: `Low syllable density (${syllableDensity.toFixed(3)})`, /* ... */ };
+  }
+
+  // QUY TẮC 2: Entropy quá thấp -> Dấu hiệu của chuỗi lặp lại
+  if (entropy < OCR_CONFIG.MIN_TEXT_ENTROPY) {
+    confidence -= 0.6;
+    reason = `Low entropy (${entropy.toFixed(2)}) suggests repetitive text.`;
+  }
+  
+  // QUY TẮC 3: Số lượng "tiếng" tối thiểu
+  if (syllableCount < OCR_CONFIG.MIN_SYLLABLE_COUNT) {
+    confidence -= 0.4;
+    reason = `Syllable count (${syllableCount}) is low.`;
+  }
+
+  const finalConfidence = Math.max(0, confidence);
+  const isValid = finalConfidence > OCR_CONFIG.OCR_TRIGGER_CONFIDENCE_THRESHOLD;
+
+  return { /* ... kết quả ... */ };
+}
+```
+
+#### **Bước 3: Cập nhật Cấu hình và Tích hợp**
+
+Cập nhật `OCR_CONFIG` với các ngưỡng phù hợp cho giải pháp Heuristic.
 
 ```typescript
 // /src/config.ts or .env
 export const OCR_CONFIG = {
-  // Ngưỡng quyết định cuối cùng
-  OCR_TRIGGER_CONFIDENCE_THRESHOLD: 0.5,
-  
-  // Các ngưỡng để tính toán điểm tin cậy
-  MIN_SYLLABLE_COUNT: 8,
-  MIN_UNIQUE_CHARS: 15,
-  MIN_TEXT_ENTROPY: 2.5,
+  OCR_TRIGGER_CONFIDENCE_THRESHOLD: 0.5, // Ngưỡng quyết định
+  MIN_ABSOLUTE_LENGTH: 10,               // Ngưỡng ký tự tối thiểu
+  MIN_SYLLABLE_COUNT: 3,                 // Ngưỡng "tiếng" tối thiểu
+  MIN_SYLLABLE_DENSITY: 0.05,            // Mật độ tiếng/ký tự (quan trọng)
+  MIN_TEXT_ENTROPY: 1.5,
 };
 ```
 
-#### **Giai đoạn 3: Tích hợp vào `HybridPdfProcessor`**
+---
+### **Giai đoạn 2: Nâng cấp với Học máy (Future Enhancement)**
 
-Cập nhật lại logic phân loại ban đầu và phân loại từng trang.
+Phần này được giữ lại trong thiết kế để định hướng cho tương lai khi có đủ nguồn lực.
 
-**Code cũ:**
-`if (data.text && data.text.length > 50) { ... }`
+*   **Hành động:** Tích hợp thư viện `@kele23/gibberish`.
+*   **Cải tiến:** Huấn luyện một mô hình riêng cho Tiếng Việt để tăng độ chính xác.
+*   **Lợi ích:** Có khả năng phát hiện các mẫu văn bản vô nghĩa phức tạp hơn mà giải pháp dựa trên quy tắc có thể bỏ sót.
 
-**Code mới:**
-```typescript
-import { validateTextQuality } from './utils/text-validation';
-import { OCR_CONFIG } from '../config';
+### 5. Kế Hoạch Kiểm Thử và Xác Minh (Chi tiết)
 
-// ... bên trong performInitialCheck hoặc classifyPages
+Mục tiêu của giai đoạn này là đảm bảo logic xác thực mới hoạt động chính xác, hiệu quả và không gây ảnh hưởng tiêu cực đến hiệu năng hệ thống.
 
-const validationResult = validateTextQuality(data.text);
+#### **5.1. Bộ Dữ Liệu Kiểm Thử (Test Data Set)**
 
-// Ghi log để tiện debug
-console.log(`Validation for page ${i}:`, validationResult);
+Cần chuẩn bị một bộ dữ liệu PDF đa dạng để bao quát các kịch bản sau:
 
-if (validationResult.confidence > OCR_CONFIG.OCR_TRIGGER_CONFIDENCE_THRESHOLD) {
-    // Là văn bản hợp lệ
-    return { type: 'text', content: data.text, ... };
-} else {
-    // Cần OCR, ghi rõ lý do
-    console.log(`Triggering OCR for page ${i}. Reason: ${validationResult.reason}`);
-    return { type: 'scan_or_hybrid', ... };
-}
-```
+| Loại PDF | Mô tả | Kết quả Kỳ vọng | Lý do (Dự kiến) |
+| :--- | :--- | :--- | :--- |
+| **PDF Lỗi (Problematic)** | File chỉ chứa các dòng dấu chấm (`.......`) hoặc ký tự lặp lại (`ababab...`). | **Phải kích hoạt OCR** | `confidence: 0`, `reason: "Low syllable density"` |
+| **PDF Rác (Gibberish)** | File chứa các chuỗi ký tự ngẫu nhiên (`asdfjkl;...`). | **Phải kích hoạt OCR** | `confidence: 0`, `reason: "Low syllable density"` |
+| **PDF Văn bản Hợp lệ** | Một trang hợp đồng, bài báo Tiếng Việt chuẩn. | **Không kích hoạt OCR** | `confidence > threshold`, `reason: "Valid text"` |
+| **PDF Dạng Ảnh Scan** | Một tài liệu được scan hoàn toàn, không có lớp text. | **Phải kích hoạt OCR** | `charLength: 0` (sau khi `pdf-parse` không trích xuất được gì) |
+| **PDF Lai (Hybrid)** | Có cả trang chứa text và trang được scan. | **Xử lý đúng từng trang** | Logic `validateTextQuality` được áp dụng cho từng trang. |
+| **PDF Cận biên (Ngắn)** | Chứa một câu rất ngắn nhưng hợp lệ (ví dụ: "Đã thanh toán."). | **Không kích hoạt OCR** | `syllableCount` và `charLength` vượt ngưỡng tối thiểu. |
+| **PDF Cận biên (Dài)** | Chứa một câu rất dài nhưng vô nghĩa. | **Phải kích hoạt OCR** | `syllableDensity` thấp. |
+| **PDF Rỗng** | File PDF không có nội dung. | **Xử lý mượt mà, không lỗi** | Bỏ qua, không kích hoạt OCR. |
 
-#### **Giai đoạn 4: Tối ưu Prompt cho Gemini API**
+#### **5.2. Các Bước Kiểm Thử Chi Tiết**
 
-Khi luồng OCR được kích hoạt, đảm bảo prompt gửi đến Gemini được tối ưu cho tiếng Việt.
+1.  **Kiểm thử Logic Xác thực:**
+    *   **Hành động:** Viết một script kiểm thử riêng (ví dụ: `test-text-validation.js`) để gọi trực tiếp hàm `validateTextQuality` với các chuỗi văn bản mẫu (lấy từ bộ dữ liệu trên).
+    *   **Xác minh:**
+        *   Đối với chuỗi `........`, kết quả phải là `{ isValid: false, confidence: 0 }`.
+        *   Đối với chuỗi "Hợp đồng mua bán nhà đất", kết quả phải là `{ isValid: true, confidence > 0.5 }`.
+        *   Kiểm tra các giá trị `metrics` và `reason` để đảm bảo các quy tắc đang được áp dụng đúng.
 
-**Prompt cũ:** "Extract text from this image."
+2.  **Kiểm thử Tích hợp End-to-End:**
+    *   **Hành động:** Sử dụng giao diện người dùng hoặc gọi API để tải lên từng file trong "Bộ Dữ Liệu Kiểm Thử".
+    *   **Xác minh:**
+        *   Theo dõi log của hệ thống để xem output của hàm `validateTextQuality` cho từng trang.
+        *   Kiểm tra kết quả cuối cùng: văn bản trích xuất được có đúng là từ OCR hay từ text gốc không?
+        *   Kiểm tra metadata trả về (`method: 'text-only'`, `'ocr-only'`, hoặc `'hybrid'`) có khớp với loại PDF đã tải lên không.
 
-**Prompt mới, mạnh mẽ hơn:**
-`"Hãy nhận dạng và trích xuất toàn bộ văn bản trong hình ảnh này. Văn bản được viết bằng tiếng Việt có dấu. Vui lòng giữ nguyên dấu và định dạng gốc một cách chính xác nhất có thể."`
+#### **5.3. Đo lường và Đánh giá Hiệu năng (Performance Benchmark)**
 
-### 5. Kế Hoạch Kiểm Thử và Xác Minh
+Logic mới sẽ tốn thêm một chút thời gian xử lý so với việc chỉ kiểm tra `text.length`. Cần đảm bảo chi phí này là không đáng kể.
 
-Cần chuẩn bị một bộ dữ liệu PDF đa dạng để kiểm thử, bao gồm:
-1.  **PDF Lỗi (Problematic):** File chỉ chứa các dòng dấu chấm (`.......`). -> **Kỳ vọng:** Phải kích hoạt OCR.
-2.  **PDF Văn Bản Tiếng Việt Hợp Lệ:** Một trang hợp đồng, bài báo. -> **Kỳ vọng:** Không kích hoạt OCR.
-3.  **PDF Dạng Ảnh Scan:** Một tài liệu được scan hoàn toàn. -> **Kỳ vọng:** Phải kích hoạt OCR.
-4.  **PDF Lai (Hybrid):** Có cả text và hình ảnh. -> **Kỳ vọng:** Xử lý chính xác từng trang.
-5.  **PDF Cận Biên (Edge Case):** Chứa một câu rất ngắn nhưng hợp lệ ("Đã thanh toán."). -> **Kỳ vọng:** Không kích hoạt OCR (cần tinh chỉnh ngưỡng để đạt được điều này).
-6.  **PDF Rỗng:** File PDF không có nội dung. -> **Kỳ vọng:** Xử lý mượt mà, không gây lỗi.
+*   **Hành động:**
+    1.  Chuẩn bị một file PDF lớn chỉ chứa văn bản (ví dụ: 50-100 trang).
+    2.  Viết một script để xử lý file này 10 lần bằng logic **cũ** và ghi lại tổng thời gian.
+    3.  Viết một script để xử lý file này 10 lần bằng logic **mới** và ghi lại tổng thời gian.
+*   **Xác minh:**
+    *   Tính toán thời gian xử lý trung bình cho mỗi lần chạy.
+    *   **Kết quả kỳ vọng:** Thời gian xử lý của logic mới không được vượt quá 15% so với logic cũ. Mức chênh lệch này được coi là chấp nhận được cho sự gia tăng về độ chính xác.
 
 ### 6. Kết Luận
 
-Việc chuyển đổi sang hệ thống xác thực chất lượng dựa trên điểm tin cậy sẽ giúp hệ thống trở nên:
-*   **Thông minh hơn:** Có khả năng phân biệt nội dung có ý nghĩa và nội dung rác.
-*   **Mạnh mẽ hơn:** Xử lý tốt hơn các tài liệu tiếng Việt và các trường hợp đặc biệt.
-*   **Dễ bảo trì hơn:** Logic phức tạp được đóng gói trong một module riêng, các ngưỡng xử lý có thể được tinh chỉnh dễ dàng qua cấu hình.
-
-Đây là một bước tiến quan trọng để nâng cao độ chính xác và độ tin cậy của toàn bộ luồng xử lý tài liệu.
+Việc triển khai theo **phương pháp Heuristic trước mắt** là một cách tiếp cận thực tế, giúp **giải quyết vấn đề ngay lập tức** với chi phí và thời gian tối ưu. Hệ thống vẫn sẽ trở nên:
+*   **Thông minh hơn:** Phân biệt được nội dung có ý nghĩa và nội dung rác phổ biến.
+*   **Mạnh mẽ hơn:** Xử lý tốt hơn các trường hợp như `.......`.
+*   **Dễ nâng cấp:** Kiến trúc module cho phép dễ dàng tích hợp giải pháp học máy trong tương lai mà không cần thay đổi lớn.
