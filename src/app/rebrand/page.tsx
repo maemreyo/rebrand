@@ -112,6 +112,7 @@ export default function RebrandPage() {
       updateTiptapContent(json);
     },
     editable: !!tiptapContent,
+    immediatelyRender: false
   });
 
   // Effects

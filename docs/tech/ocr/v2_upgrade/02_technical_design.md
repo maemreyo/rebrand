@@ -28,12 +28,16 @@ Chúng ta sẽ thay thế logic cũ bằng một **module xác thực chất lư
 
 #### **Bước 1: Lựa chọn và Cài đặt các Thư viện**
 
-Chúng ta sẽ chỉ sử dụng các thư viện cần thiết cho việc tính toán các chỉ số cơ bản:
+Chúng ta sẽ sử dụng các thư viện sau:
 
 1.  **Tính toán Entropy (Độ ngẫu nhiên):**
     *   **Package:** `fast-password-entropy`
+    *   **Lý do:** Nhẹ, nhanh, và không có dependencies.
+
 2.  **Phân tích Tiếng Việt (Đếm "tiếng"):**
     *   **Package:** `vntk`
+    *   **Lý do:** Cung cấp chức năng "Word Segmentation" chính xác cho Tiếng Việt. Mặc dù có kích thước lớn hơn các thư viện siêu nhẹ, nhưng đảm bảo độ chính xác và tính ổn định.
+    *   **Lưu ý quan trọng:** `vntk` là thư viện Node.js. Trong ứng dụng Next.js, nó **chỉ được sử dụng trong môi trường Node.js** (Server Components, Server Actions, API Routes) để tránh tăng kích thước bundle cho client và các vấn đề về môi trường Edge Functions.
 
 **Lệnh cài đặt:**
 ```bash
@@ -63,7 +67,7 @@ interface TextValidationResult {
 
 // /src/lib/utils/text-validation.ts (Logic Heuristic)
 import { stringEntropy } from 'fast-password-entropy';
-import { wordTokenizer } from 'vntk';
+import { wordTokenizer } from 'vntk'; // Sử dụng vntk
 
 export function validateTextQuality(text: string): TextValidationResult {
   const normalizedText = text.normalize('NFC').trim();
@@ -73,6 +77,7 @@ export function validateTextQuality(text: string): TextValidationResult {
     // Trả về không hợp lệ nếu quá ngắn
   }
 
+  // Sử dụng wordTokenizer từ vntk
   const syllableCount = wordTokenizer().tag(normalizedText).length;
   const entropy = stringEntropy(normalizedText);
   const syllableDensity = charLength > 0 ? syllableCount / charLength : 0;
