@@ -1,7 +1,9 @@
 {
-  "name": "rebrand",
+  "name": "docrebrander",
   "version": "0.1.0",
   "private": true,
+  "description": "AI-powered document processing pipeline that converts raw text into structured JSON, enables rich text editing, and generates publication-ready PDFs.",
+  "keywords": ["AI", "document processing", "Gemini AI", "Tiptap", "pdfme", "Next.js", "TypeScript", "JSON", "PDF generation", "text editor", "document automation"],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
