@@ -24,7 +24,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
+    "@google/genai": "^1.8.0",
     "@pdfme/common": "^5.4.0",
     "@pdfme/generator": "^5.4.0",
     "@radix-ui/react-checkbox": "^1.3.2",
@@ -47,7 +47,14 @@
     "next": "15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "@tiptap/extension-table": "^2.25.0",
+    "@tiptap/extension-table-row": "^2.25.0",
+    "@tiptap/extension-table-header": "^2.25.0",
+    "@tiptap/extension-table-cell": "^2.25.0",
+    "@tiptap/extension-image": "^2.25.0",
+    "@tiptap/extension-link": "^2.25.0",
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
