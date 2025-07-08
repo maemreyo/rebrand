@@ -35,6 +35,7 @@
     "mock:pdf:toggle": "node scripts/toggle-mock-pdf.js toggle"
   },
   "dependencies": {
+    "@aarkue/tiptap-math-extension": "^1.3.6",
     "@google/genai": "^1.8.0",
     "@pdfme/common": "^5.4.0",
     "@pdfme/generator": "^5.4.0",
@@ -52,10 +53,13 @@
     "@supabase/supabase-js": "^2.50.3",
     "@tiptap/extension-image": "^2.25.0",
     "@tiptap/extension-link": "^2.25.0",
+    "@tiptap/extension-placeholder": "^2.25.0",
     "@tiptap/extension-table": "^2.25.0",
     "@tiptap/extension-table-cell": "^2.25.0",
     "@tiptap/extension-table-header": "^2.25.0",
     "@tiptap/extension-table-row": "^2.25.0",
+    "@tiptap/extension-text-align": "^2.25.0",
+    "@tiptap/extension-typography": "^2.25.0",
     "@tiptap/pm": "^2.25.0",
     "@tiptap/react": "^2.25.0",
     "@tiptap/starter-kit": "^2.25.0",
@@ -63,6 +67,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fast-password-entropy": "^1.1.1",
+    "katex": "^0.16.8",
     "lucide-react": "^0.525.0",
     "next": "15.3.5",
     "pdf-parse": "^1.1.1",
@@ -73,6 +78,7 @@
     "react-dropzone": "^14.3.0",
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.1",
+    "tiptap-footnotes": "^1.0.0",
     "zod": "^3.25.74"
   },
   "devDependencies": {
