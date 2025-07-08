@@ -1,0 +1,55 @@
+Flow để debug lỗi "Processing failed: No response from Gemini AI" từ API `analyze`:
+
+1.  **src/app/api/analyze/route.ts**:
+    *   Đây là điểm vào của API.
+    *   Nó nhận request, validate dữ liệu đầu vào, và làm sạch văn bản.
+    *   Sau đó, nó khởi tạo và gọi các phương thức của `GeminiDocumentProcessor` (cụ thể là `processDocumentWithMath` hoặc `processDocumentWithFallbacks`).
+    *   Lỗi "Processing failed: No response from Gemini AI" được bắt tại đây, cho thấy nó được ném ra từ `GeminiDocumentProcessor`.
+
+2.  **src/lib/services/gemini.ts**:
+    *   File này chứa định nghĩa của lớp `GeminiDocumentProcessor`.
+    *   Đây là nơi các cuộc gọi thực tế đến API Gemini AI được thực hiện.
+    *   Lỗi "No response from Gemini AI" rất có thể bắt nguồn từ đây, có thể do:
+        *   Không nhận được phản hồi từ Gemini API (ví dụ: timeout, lỗi mạng).
+        *   Phản hồi từ Gemini API không hợp lệ hoặc không mong muốn.
+        *   Lỗi cấu hình API key hoặc các tham số khác khi gọi Gemini.
+
+3.  **src/types/document.ts**:
+    *   File này định nghĩa các loại lỗi như `DocumentProcessingError` và `MathProcessingError`.
+    *   Việc kiểm tra định nghĩa của các lỗi này có thể cung cấp thêm thông tin về nguyên nhân gốc rễ.
+
+**Các bước debug tiếp theo:**
+
+*   Kiểm tra file `src/lib/services/gemini.ts` để xem cách `GeminiDocumentProcessor` tương tác với Gemini API.
+*   Tìm kiếm các đoạn code xử lý lỗi hoặc các trường hợp không nhận được phản hồi từ Gemini trong `GeminiDocumentProcessor`.
+*   Đảm bảo rằng `process.env.GEMINI_API_KEY` được cấu hình đúng và có giá trị hợp lệ.
+*   Thêm log chi tiết hơn trong `src/lib/services/gemini.ts` để theo dõi các cuộc gọi API đến Gemini và phản hồi nhận được.
+
+---
+
+Flow để debug các vấn đề liên quan đến Editor:
+
+**1. Lỗi `RangeError: Unknown node type: math` khi thêm template vào editor:**
+
+*   **Vấn đề:** Tiptap editor không nhận diện được kiểu node `math`. Điều này chỉ ra sự không khớp giữa schema của Tiptap được cấu hình trong `MathEditor.tsx` (hoặc các file liên quan) và nội dung đang được chèn vào.
+*   **Các file cần kiểm tra:**
+    *   `src/components/MathEditor.tsx`: Đây là nơi Tiptap editor được khởi tạo và schema của nó được định nghĩa. Kiểu node `math` cần được thêm rõ ràng vào schema của editor.
+    *   `src/components/MathToolbar.tsx`: Component này kích hoạt lệnh `insertMath`. Đảm bảo dữ liệu được truyền tới `insertMath` (ví dụ: `{type: 'math', attrs: {…}}`) phải nhất quán với schema mong đợi.
+    *   `src/components/MathDocumentEditor.tsx`: Component này có thể điều phối `MathEditor` và `MathToolbar`.
+    *   Bất kỳ Tiptap extension nào liên quan đến toán học (ví dụ: `tiptap-math-extension` nếu được sử dụng). Nếu một math extension tùy chỉnh được sử dụng, định nghĩa của nó cần được kiểm tra.
+
+**2. Lỗi `Maximum update depth exceeded` khi nhấn save:**
+
+*   **Vấn đề:** Lỗi này thường xảy ra trong React khi phương thức `render` của một component (hoặc một hàm được gọi trong đó) gây ra một cập nhật trạng thái, mà đến lượt nó lại kích hoạt một render khác, dẫn đến một vòng lặp vô hạn. Điều này thường xảy ra với các hook `useEffect` hoặc `useState` nếu không được sử dụng cẩn thận.
+*   **Các file cần kiểm tra:**
+    *   `src/components/MathDocumentEditor.tsx`: Đây có thể là component chính xử lý logic lưu. Tìm kiếm các hook `useEffect` hoặc các trình xử lý sự kiện có thể gây ra re-render trong một vòng lặp.
+    *   `src/components/MathEditor.tsx`: Nếu nội dung của editor thay đổi kích hoạt một hành động lưu, file này cũng có thể liên quan.
+    *   Bất kỳ component cha nào nhận dữ liệu từ `MathDocumentEditor.tsx` và re-render dựa trên nó.
+
+**3. Luôn hiển thị `Loading toolbar...` khi vào màn hình:**
+
+*   **Vấn đề:** Điều này cho thấy component toolbar bị kẹt trong trạng thái loading, nghĩa là một điều kiện để chuyển ra khỏi trạng thái loading không bao giờ được đáp ứng, hoặc có vấn đề với dữ liệu mà nó đang chờ.
+*   **Các file cần kiểm tra:**
+    *   `src/components/MathToolbar.tsx`: Component này chịu trách nhiệm hiển thị toolbar và trạng thái loading của nó. Kiểm tra quản lý trạng thái, các hook `useEffect`, và bất kỳ hoạt động bất đồng bộ nào nó thực hiện (ví dụ: tìm nạp dữ liệu, khởi tạo instance của Tiptap editor).
+    *   `src/components/MathDocumentEditor.tsx`: Component này có thể truyền các props tới `MathToolbar.tsx` để kiểm soát trạng thái loading của nó. Đảm bảo instance của editor được truyền đúng cách và đã sẵn sàng.
+    *   `src/components/MathEditor.tsx`: Instance của Tiptap editor cần được khởi tạo hoàn chỉnh và truyền tới toolbar để nó hoạt động chính xác.

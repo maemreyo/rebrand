@@ -35,3 +35,23 @@ export { Switch } from "./switch"
 export { Progress } from "./progress"
 export { Toggle, toggleVariants } from "./toggle"
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
+export { Alert, AlertTitle, AlertDescription } from "./alert"
+export { 
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+} from "./dropdown-menu"
+export { Separator } from "./separator"
+export { Popover, PopoverTrigger, PopoverContent } from "./popover"
