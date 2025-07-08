@@ -199,7 +199,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Return PDF as response
     const filename = options?.filename || "document.pdf";
 
-    return new NextResponse(pdfBuffer, {
+    // Use Node.js Buffer directly with NextResponse
+    return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
