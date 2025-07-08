@@ -123,6 +123,7 @@ export default function RebrandPage() {
   useEffect(() => {
     if (editor && tiptapContent) {
       editor.commands.setContent(tiptapContent);
+      editor.setOptions({ editable: true }); // Ensure editor is editable after content is set
       if (activeTab === 'input') {
         setActiveTab('editor');
       }
