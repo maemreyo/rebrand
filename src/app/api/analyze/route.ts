@@ -2,6 +2,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { GeminiDocumentProcessor } from '@/lib/services/gemini';
 import { CanonicalToTiptapAdapter, validateTiptapJsonWithMath, extractMathFromTiptapJson } from '@/lib/adapters/canonical-to-tiptap';
 import { 
@@ -89,6 +91,76 @@ interface EnhancedAnalyzeResponse {
 }
 
 // =============================================================================
+// Mock Data Utility Functions
+// =============================================================================
+
+/**
+ * Check if we should use mock data in development
+ */
+function shouldUseMockData(): boolean {
+  return (
+    process.env.NODE_ENV === "development" && 
+    process.env.USE_MOCK_ANALYZE_API === "true"
+  );
+}
+
+/**
+ * Load mock data from data/analyze-pdf-response.json
+ */
+async function loadMockData(): Promise<EnhancedAnalyzeResponse | null> {
+  try {
+    const dataPath = path.join(process.cwd(), 'data', 'analyze-pdf-response.json');
+    const fileContent = await fs.readFile(dataPath, 'utf8');
+    const mockData = JSON.parse(fileContent);
+    
+    // Ensure the mock data has the required structure
+    if (!mockData.success || !mockData.data || !mockData.data.canonical) {
+      console.warn('⚠️ [DEV] Mock data structure is invalid');
+      return null;
+    }
+    
+    return mockData as EnhancedAnalyzeResponse;
+  } catch (error) {
+    console.error('❌ [DEV] Failed to load mock data:', error);
+    return null;
+  }
+}
+
+/**
+ * Transform mock data to match current request
+ */
+function transformMockDataForRequest(
+  mockData: EnhancedAnalyzeResponse, 
+  text: string, 
+  options: any,
+  startTime: number
+): EnhancedAnalyzeResponse {
+  if (!mockData.data) return mockData;
+  
+  const processingTime = Date.now() - startTime;
+  
+  // Update metadata to reflect current request
+  mockData.data.metadata = {
+    ...mockData.data.metadata,
+    processingTime,
+    textLength: text.length,
+    processingStrategy: options.mathDetection ? 'math-enhanced-mock' : 'standard-mock',
+    geminiModel: 'gemini-2.5-flash-mock',
+    apiVersion: '2.0.0-dev',
+  };
+  
+  // Update math analysis based on options
+  if (options.mathDetection) {
+    mockData.data.metadata.mathAnalysis = {
+      ...mockData.data.metadata.mathAnalysis,
+      hasMathContent: true,
+    };
+  }
+  
+  return mockData;
+}
+
+// =============================================================================
 // Enhanced POST Handler with Math Support
 // =============================================================================
 
@@ -120,6 +192,25 @@ export async function POST(request: NextRequest): Promise<NextResponse<EnhancedA
 
     if (!sanitizedText) {
       return createErrorResponse('Text content is empty after sanitization');
+    }
+
+    // =============================================================================
+    // Mock Data Check for Development
+    // =============================================================================
+    
+    // Check if we should use mock data in development
+    if (shouldUseMockData()) {
+      console.log("🔧 [DEV] Development mode detected - attempting to use mock data for analyze API");
+      const mockData = await loadMockData();
+      if (mockData) {
+        // Transform mock data to match current request
+        const transformedMockData = transformMockDataForRequest(mockData, sanitizedText, options, startTime);
+        
+        console.log("✅ [DEV] Returning mock data for analyze API");
+        return NextResponse.json(transformedMockData, { status: 200 });
+      } else {
+        console.log("⚠️ [DEV] Mock data not available, falling back to normal processing");
+      }
     }
 
     // =============================================================================
@@ -355,6 +446,7 @@ function analyzeAcademicContent(document: CanonicalDocument): AcademicAnalysisMe
 export async function GET(): Promise<NextResponse> {
   try {
     const hasApiKey = !!process.env.GEMINI_API_KEY;
+    const mockDataEnabled = shouldUseMockData();
     
     return NextResponse.json(
       {
@@ -366,12 +458,17 @@ export async function GET(): Promise<NextResponse> {
           academicMode: true,
           fallbackProcessing: true,
           enhancedMetadata: true,
+          mockDataEnabled,
         },
         supportedDocumentTypes: [
           'mathematical', 'academic', 'report', 'article', 'form', 'contract', 'other'
         ],
         apiVersion: '2.0.0',
         timestamp: new Date().toISOString(),
+        development: {
+          mockDataEnabled,
+          mockDataSource: 'data/analyze-pdf-response.json',
+        },
       },
       { status: 200 }
     );

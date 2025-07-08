@@ -37,6 +37,18 @@ export class CanonicalToTiptapAdapter {
    * Transform a canonical document to Tiptap JSON format with math support
    */
   transform(canonicalDoc: CanonicalDocument): JSONContent {
+    // 🔧 FIX 1: Defensive check for canonicalDoc.content
+    if (!canonicalDoc?.content || !Array.isArray(canonicalDoc.content)) {
+      console.warn(
+        "canonicalDoc.content is undefined or not an array:",
+        canonicalDoc
+      );
+      return {
+        type: "doc",
+        content: [],
+      };
+    }
+
     return {
       type: "doc",
       content: canonicalDoc.content.map((block) => this.transformBlock(block)),
@@ -89,24 +101,55 @@ export class CanonicalToTiptapAdapter {
   // Existing Block Transformers (unchanged)
   // =============================================================================
 
+  /**
+   * 🔧 ENHANCED: Transform heading with debugging
+   */
   private transformHeading(block: HeadingBlock): JSONContent {
-    return {
+    console.log("=== transformHeading Debug ===");
+    console.log("Input block:", JSON.stringify(block, null, 2));
+
+    const transformedContent = this.transformInlineContent(block.content || []);
+
+    const result = {
       type: "heading",
       attrs: {
-        level: block.level,
+        level: block.level || 1,
       },
-      content: this.transformInlineContent(block.content),
+      content: transformedContent,
     };
+
+    console.log("Heading transform result:", JSON.stringify(result, null, 2));
+    return result;
   }
 
+  /**
+   * 🔧 ENHANCED: Transform paragraph with debugging
+   */
   private transformParagraph(block: ParagraphBlock): JSONContent {
-    return {
+    console.log("=== transformParagraph Debug ===");
+    console.log("Input block:", JSON.stringify(block, null, 2));
+
+    const transformedContent = this.transformInlineContent(block.content || []);
+
+    const result = {
       type: "paragraph",
-      content: this.transformInlineContent(block.content),
+      content: transformedContent,
     };
+
+    console.log("Paragraph transform result:", JSON.stringify(result, null, 2));
+    return result;
   }
 
   private transformList(block: ListBlock): JSONContent {
+    // 🔧 FIX 4: Defensive check for block.items
+    if (!block.items || !Array.isArray(block.items)) {
+      console.warn("ListBlock.items is undefined or not an array:", block);
+      return {
+        type: "paragraph",
+        content: [{ type: "text", text: "" }],
+      };
+    }
+
     const listType =
       block.listType === "numbered" ? "orderedList" : "bulletList";
 
@@ -125,12 +168,12 @@ export class CanonicalToTiptapAdapter {
     const content: JSONContent[] = [
       {
         type: "paragraph",
-        content: this.transformInlineContent(item.content),
+        content: this.transformInlineContent(item.content || []), // 🔧 FIX 5: Fallback to empty array
       },
     ];
 
-    // Handle nested lists
-    if (item.items && item.items.length > 0) {
+    // Handle nested lists with defensive check
+    if (item.items && Array.isArray(item.items) && item.items.length > 0) {
       const nestedListType =
         listType === "numbered" ? "orderedList" : "bulletList";
       content.push({
@@ -148,6 +191,26 @@ export class CanonicalToTiptapAdapter {
   }
 
   private transformTable(block: TableBlock): JSONContent {
+    // 🔧 FIX 6: Defensive checks for table structure
+    if (!block.headers?.cells || !Array.isArray(block.headers.cells)) {
+      console.warn(
+        "TableBlock.headers.cells is undefined or not an array:",
+        block
+      );
+      return {
+        type: "paragraph",
+        content: [{ type: "text", text: "Invalid table structure" }],
+      };
+    }
+
+    if (!block.rows || !Array.isArray(block.rows)) {
+      console.warn("TableBlock.rows is undefined or not an array:", block);
+      return {
+        type: "paragraph",
+        content: [{ type: "text", text: "Invalid table structure" }],
+      };
+    }
+
     // Create header row
     const headerRow: JSONContent = {
       type: "tableRow",
@@ -160,7 +223,7 @@ export class CanonicalToTiptapAdapter {
         content: [
           {
             type: "paragraph",
-            content: this.transformInlineContent(cell.content),
+            content: this.transformInlineContent(cell.content || []),
           },
         ],
       })),
@@ -169,7 +232,7 @@ export class CanonicalToTiptapAdapter {
     // Create body rows
     const bodyRows: JSONContent[] = block.rows.map((row) => ({
       type: "tableRow",
-      content: row.cells.map((cell) => ({
+      content: (row.cells || []).map((cell) => ({
         type: "tableCell",
         attrs: {
           colspan: cell.colspan || 1,
@@ -178,7 +241,7 @@ export class CanonicalToTiptapAdapter {
         content: [
           {
             type: "paragraph",
-            content: this.transformInlineContent(cell.content),
+            content: this.transformInlineContent(cell.content || []),
           },
         ],
       })),
@@ -219,6 +282,23 @@ export class CanonicalToTiptapAdapter {
   }
 
   private transformBlockquote(block: BlockquoteBlock): JSONContent {
+    // 🔧 FIX 3: Defensive check for block.content
+    if (!block.content || !Array.isArray(block.content)) {
+      console.warn(
+        "BlockquoteBlock.content is undefined or not an array:",
+        block
+      );
+      return {
+        type: "blockquote",
+        content: [
+          {
+            type: "paragraph",
+            content: [{ type: "text", text: "" }],
+          },
+        ],
+      };
+    }
+
     return {
       type: "blockquote",
       content: block.content.map((childBlock) =>
@@ -228,14 +308,13 @@ export class CanonicalToTiptapAdapter {
   }
 
   private transformMultipleChoice(block: MultipleChoiceBlock): JSONContent {
-    // Custom node for multiple choice questions
     return {
       type: "multipleChoice",
       attrs: {
-        question: this.transformInlineContent(block.question),
-        options: block.options.map((option) => ({
+        question: this.transformInlineContent(block.question || []),
+        options: (block.options || []).map((option) => ({
           id: option.id,
-          content: this.transformInlineContent(option.content),
+          content: this.transformInlineContent(option.content || []),
           isCorrect: option.isCorrect || false,
         })),
         correctAnswer: block.correctAnswer,
@@ -259,9 +338,18 @@ export class CanonicalToTiptapAdapter {
   /**
    * Transform math block to Tiptap format
    */
+
+  // 🔧 FIX 7: Add comprehensive error handling for math blocks
   private transformMath(block: MathBlock): JSONContent {
+    if (!block.latex) {
+      console.warn("MathBlock.latex is undefined:", block);
+      return {
+        type: "paragraph",
+        content: [{ type: "text", text: "[Invalid math block]" }],
+      };
+    }
+
     if (block.mathType === "inline") {
-      // For inline math, we'll embed it in a paragraph
       return {
         type: "paragraph",
         content: [
@@ -272,23 +360,19 @@ export class CanonicalToTiptapAdapter {
               rendered: block.rendered,
               error: block.error,
               description: block.description,
-              complexity: block.complexity,
             },
           },
         ],
       };
     } else {
-      // Display math as a separate block
       return {
         type: "mathDisplay",
         attrs: {
           latex: block.latex,
           rendered: block.rendered,
-          numbered: block.numbered || false,
-          label: block.label,
           error: block.error,
           description: block.description,
-          complexity: block.complexity,
+          numbered: block.numbered || false,
         },
       };
     }
@@ -373,74 +457,130 @@ export class CanonicalToTiptapAdapter {
   // =============================================================================
 
   /**
-   * Transform inline content with math support (ENHANCED)
+   * 🔧 ENHANCED: Transform inline content with detailed logging
    */
   private transformInlineContent(content: InlineContent[]): JSONContent[] {
-    return content.map((item) => {
+    // 🔧 FIX: Add comprehensive debugging
+    console.log("=== transformInlineContent Debug ===");
+    console.log("Input content:", JSON.stringify(content, null, 2));
+    console.log("Content type:", typeof content);
+    console.log("Content is array:", Array.isArray(content));
+    console.log("Content length:", content?.length || "undefined");
+
+    if (!content || !Array.isArray(content)) {
+      console.warn(
+        "⚠️  transformInlineContent received invalid content:",
+        content
+      );
+      return [
+        {
+          type: "text",
+          text: "[Content missing or invalid]",
+        },
+      ];
+    }
+
+    if (content.length === 0) {
+      console.warn("⚠️  transformInlineContent received empty content array");
+      return [
+        {
+          type: "text",
+          text: "[Empty content]",
+        },
+      ];
+    }
+
+    const transformedContent = content.map((item, index) => {
+      console.log(
+        `Transforming inline item ${index}:`,
+        JSON.stringify(item, null, 2)
+      );
+
       switch (item.type) {
         case "text":
-          return this.transformText(item);
+          const textResult = this.transformText(item);
+          console.log(
+            `Text transform result ${index}:`,
+            JSON.stringify(textResult, null, 2)
+          );
+          return textResult;
+
         case "link":
-          return this.transformLink(item);
+          const linkResult = this.transformLink(item);
+          console.log(
+            `Link transform result ${index}:`,
+            JSON.stringify(linkResult, null, 2)
+          );
+          return linkResult;
+
         case "break":
           return this.transformBreak(item);
 
-        //  Math and Academic Inline Content
         case "math":
+          console.log(`Found inline math ${index}:`, item);
           return this.transformMathInline(item as MathInlineContent);
+
         case "footnoteRef":
           return this.transformFootnoteRef(item as FootnoteReference);
+
         case "citationRef":
           return this.transformCitationRef(item as CitationReference);
+
         case "symbol":
           return this.transformSymbol(item as SymbolContent);
 
         default:
-          // Fallback for unknown types
+          console.warn(`Unknown inline content type: ${item.type}`, item);
           return {
             type: "text",
-            text: (item as any).text || "",
+            text: (item as any).text || `[Unknown: ${item.type}]`,
           };
       }
     });
+
+    console.log(
+      "Final transformed content:",
+      JSON.stringify(transformedContent, null, 2)
+    );
+    return transformedContent;
   }
 
   /**
-   * Transform text content (enhanced with more formatting options)
+   * 🔧 ENHANCED: Transform text with better debugging
    */
   private transformText(item: TextContent | FormattedTextContent): JSONContent {
-    const marks: any[] = [];
+    console.log("=== transformText Debug ===");
+    console.log("Input item:", JSON.stringify(item, null, 2));
 
-    // Check if item has formatting
-    if ("formatting" in item && item.formatting) {
-      const { formatting } = item;
-
-      if (formatting.bold) marks.push({ type: "bold" });
-      if (formatting.italic) marks.push({ type: "italic" });
-      if (formatting.underline) marks.push({ type: "underline" });
-      if (formatting.strikethrough) marks.push({ type: "strike" });
-      if (formatting.code) marks.push({ type: "code" });
-      if (formatting.superscript) marks.push({ type: "superscript" });
-      if (formatting.subscript) marks.push({ type: "subscript" });
-
-      //  Enhanced formatting
-      if (formatting.highlight) marks.push({ type: "highlight" });
-      if (formatting.color)
-        marks.push({
-          type: "textStyle",
-          attrs: { color: formatting.color },
-        });
+    if (!item.text) {
+      console.warn("⚠️  Text item missing text property:", item);
+      return {
+        type: "text",
+        text: "[Missing text content]",
+      };
     }
 
-    const result: JSONContent = {
+    const marks = [];
+
+    if ("formatting" in item && item.formatting) {
+      console.log("Processing formatting:", item.formatting);
+
+      if (item.formatting.bold) marks.push({ type: "bold" });
+      if (item.formatting.italic) marks.push({ type: "italic" });
+      if (item.formatting.underline) marks.push({ type: "underline" });
+      if (item.formatting.strikethrough) marks.push({ type: "strike" });
+      if (item.formatting.code) marks.push({ type: "code" });
+      if (item.formatting.superscript) marks.push({ type: "superscript" });
+      if (item.formatting.subscript) marks.push({ type: "subscript" });
+    }
+
+    const result = {
       type: "text",
       text: item.text,
+      ...(marks.length > 0 && { marks }),
     };
 
-    if (marks.length > 0) {
-      result.marks = marks;
-    }
-
+    console.log("Text transform result:", JSON.stringify(result, null, 2));
     return result;
   }
 
@@ -738,13 +878,46 @@ export class MathTransformationError extends Error {
 /**
  * Safe transformation with enhanced error handling
  */
+// 🔧 FIX 9: Enhanced error handling wrapper
 export const safeCanonicalToTiptapJson = (
   canonicalDoc: CanonicalDocument
 ):
   | { success: true; data: JSONContent }
   | { success: false; error: string; details?: any } => {
   try {
-    const result = canonicalToTiptapJson(canonicalDoc);
+    // Pre-validate input
+    if (!canonicalDoc) {
+      return {
+        success: false,
+        error: "CanonicalDocument is null or undefined",
+        details: { input: canonicalDoc },
+      };
+    }
+
+    if (!canonicalDoc.content) {
+      return {
+        success: false,
+        error: "CanonicalDocument.content is undefined",
+        details: {
+          document: canonicalDoc,
+          contentType: typeof canonicalDoc.content,
+        },
+      };
+    }
+
+    if (!Array.isArray(canonicalDoc.content)) {
+      return {
+        success: false,
+        error: "CanonicalDocument.content is not an array",
+        details: {
+          contentType: typeof canonicalDoc.content,
+          contentValue: canonicalDoc.content,
+        },
+      };
+    }
+
+    const adapter = new CanonicalToTiptapAdapter();
+    const result = adapter.transform(canonicalDoc);
 
     // Validate the result
     if (!validateTiptapJsonWithMath(result)) {
@@ -757,16 +930,19 @@ export const safeCanonicalToTiptapJson = (
 
     return { success: true, data: result };
   } catch (error) {
+    console.error("Error in safeCanonicalToTiptapJson:", error);
+
     return {
       success: false,
       error:
         error instanceof Error ? error.message : "Unknown transformation error",
-      details:
-        error instanceof TiptapTransformationError
-          ? {
-              originalBlock: error.originalBlock,
-            }
-          : undefined,
+      details: {
+        errorType:
+          error instanceof Error ? error.constructor.name : typeof error,
+        stack: error instanceof Error ? error.stack : undefined,
+        originalError: error,
+        adapterError: error instanceof Error ? error.message : String(error),
+      },
     };
   }
 };
