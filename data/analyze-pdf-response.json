@@ -4,7 +4,7 @@
         "canonical": {
             "metadata": {
                 "title": "PHIẾU HỌC TẬP",
-                "author": "Lưu Huy Thưởng – Nguyễn Mạnh Cường",
+                "author": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường",
                 "keywords": [
                     "mệnh đề",
                     "logic",
@@ -12,603 +12,526 @@
                     "phủ định",
                     "kéo theo",
                     "tương đương",
-                    "∀",
-                    "∃",
-                    "HOCMAI"
+                    "toán học"
                 ],
                 "documentType": "mathematical",
-                "language": "Vietnamese",
-                "confidenceScore": 0.95,
+                "language": "vietnamese",
+                "confidenceScore": 0.9,
                 "hasMatematicalContent": true,
                 "mathComplexity": "intermediate"
             },
             "content": [
                 {
-                    "id": "block_1",
-                    "type": "heading",
+                    "id": "block_0",
+                    "type": "paragraph",
                     "displayText": "Tài Liệu Ôn Thi Group"
                 },
                 {
-                    "id": "block_2",
+                    "id": "block_1",
                     "type": "paragraph",
                     "displayText": "Hocmai.vn – Học chủ động - Sống tích cực"
                 },
                 {
-                    "id": "block_3",
+                    "id": "block_2",
                     "type": "paragraph",
                     "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
                 },
                 {
-                    "id": "block_4",
+                    "id": "block_3",
                     "type": "paragraph",
                     "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
                 },
                 {
-                    "id": "block_5",
+                    "id": "block_4",
                     "type": "heading",
                     "displayText": "PHIẾU HỌC TẬP"
                 },
                 {
-                    "id": "block_6",
+                    "id": "block_5",
                     "type": "paragraph",
                     "displayText": "Bài: Luyện tập mệnh đề (Tiết 3)"
                 },
                 {
-                    "id": "block_7",
+                    "id": "block_6",
                     "type": "paragraph",
                     "displayText": "Ngày học:.........................................."
                 },
                 {
-                    "id": "block_8",
+                    "id": "block_7",
                     "type": "heading",
                     "displayText": "1. Lý thuyết cần nhớ"
                 },
                 {
+                    "id": "block_8",
+                    "type": "heading",
+                    "displayText": "Mệnh đề"
+                },
+                {
                     "id": "block_9",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề",
-                    "theoremType": "definition"
+                    "type": "list",
+                    "displayText": "* Khẳng định* Hoặc đúng hoặc sai, không thể vừa đúng vừa sai"
                 },
                 {
                     "id": "block_10",
-                    "type": "paragraph",
-                    "displayText": "*   Khẳng định"
+                    "type": "heading",
+                    "displayText": "Mệnh đề phủ định"
                 },
                 {
                     "id": "block_11",
-                    "type": "paragraph",
-                    "displayText": "*   Hoặc đúng hoặc sai, không thể vừa đúng vừa sai"
+                    "type": "list",
+                    "displayText": "* Mệnh đề phủ định của P là: P"
                 },
                 {
                     "id": "block_12",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề phủ định",
-                    "theoremType": "definition"
+                    "type": "list",
+                    "displayText": "* Nếu P đúng thì P sai"
                 },
                 {
                     "id": "block_13",
-                    "type": "paragraph",
-                    "displayText": "*   Mệnh đề phủ định của P là: P"
+                    "type": "list",
+                    "displayText": "* Nếu P sai thì P sai"
                 },
                 {
                     "id": "block_14",
                     "type": "paragraph",
-                    "displayText": "*   Nếu P đúng thì P sai"
+                    "displayText": "Để phủ định mệnh đề P"
                 },
                 {
                     "id": "block_15",
-                    "type": "paragraph",
-                    "displayText": "*   Nếu P sai thì P đúng"
+                    "type": "list",
+                    "displayText": "* Thêm/bớt từ \"không\" hoặc \"không phải\""
                 },
                 {
                     "id": "block_16",
-                    "type": "paragraph",
-                    "displayText": "*   **Để phủ định mệnh đề P**"
+                    "type": "list",
+                    "displayText": "* \">\" phủ định của \"<=\"",
+                    "latex": ">\\text{ phủ định của }\\leq"
                 },
                 {
                     "id": "block_17",
-                    "type": "paragraph",
-                    "displayText": "*   Thêm/bớt từ \"không\" hoặc \"không phải\""
+                    "type": "list",
+                    "displayText": "* \"<\" phủ định của \">=\"",
+                    "latex": "<\\text{ phủ định của }\\geq"
                 },
                 {
                     "id": "block_18",
-                    "type": "paragraph",
-                    "displayText": "*   \">\" phủ định của \"<=\"",
-                    "latex": "> \\text{ phủ định của } \\leq",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* \"=\" phủ định của \"≠\"",
+                    "latex": "=\\text{ phủ định của }\\neq"
                 },
                 {
                     "id": "block_19",
-                    "type": "paragraph",
-                    "displayText": "*   \"<\" phủ định của \">=\"",
-                    "latex": "< \\text{ phủ định của } \\geq",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* \"∀x ∈ X, P(x)\" phủ định của \"∃x ∈ X, P(x)\"",
+                    "latex": "\\forall x \\in X, P(x)\\text{ phủ định của }\\exists x \\in X, P(x)"
                 },
                 {
                     "id": "block_20",
-                    "type": "paragraph",
-                    "displayText": "*   \"=\" phủ định của \"≠\"",
-                    "latex": "= \\text{ phủ định của } \\neq",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* \"∃x ∈ X, P(x)\" phủ định của \"∀x ∈ X, P(x)\"",
+                    "latex": "\\exists x \\in X, P(x)\\text{ phủ định của }\\forall x \\in X, P(x)"
                 },
                 {
                     "id": "block_21",
-                    "type": "paragraph",
-                    "displayText": "*   \"∀x ∈ X, P(x)\" phủ định của \"∃x ∈ X, P(x)\"",
-                    "latex": "\\forall x \\in X, P(x) \\text{ phủ định của } \\exists x \\in X, P(x)",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "heading",
+                    "displayText": "Mệnh đề chứa biến"
                 },
                 {
                     "id": "block_22",
-                    "type": "paragraph",
-                    "displayText": "*   \"∃x ∈ X, P(x)\" phủ định của \"∀x ∈ X, P(x)\"",
-                    "latex": "\\exists x \\in X, P(x) \\text{ phủ định của } \\forall x \\in X, P(x)",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* Chứa biến* Ứng với mỗi giá trị của biến, ta được một mệnh đề"
                 },
                 {
                     "id": "block_23",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề chứa biến",
-                    "theoremType": "definition"
+                    "type": "heading",
+                    "displayText": "Mệnh đề kéo theo"
                 },
                 {
                     "id": "block_24",
-                    "type": "paragraph",
-                    "displayText": "*   Chứa biến"
+                    "type": "list",
+                    "displayText": "* Khái niệm: Mệnh đề \"Nếu P thì Q\" được gọi là một mệnh đề kéo theo."
                 },
                 {
                     "id": "block_25",
-                    "type": "paragraph",
-                    "displayText": "*   Ứng với mỗi giá trị của biến, ta được một mệnh đề"
+                    "type": "list",
+                    "displayText": "* Kí hiệu: P => Q",
+                    "latex": "P \\Rightarrow Q"
                 },
                 {
                     "id": "block_26",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề kéo theo",
-                    "theoremType": "definition"
+                    "type": "list",
+                    "displayText": "* Giả thiết Điều kiện cần Kết luận Điều kiện đủ"
                 },
                 {
                     "id": "block_27",
-                    "type": "paragraph",
-                    "displayText": "*   Khái niệm: Mệnh đề \"Nếu P thì Q\" được gọi là một mệnh đề kéo theo."
+                    "type": "list",
+                    "displayText": "* Tính đúng sai: Dựa vào các định lí."
                 },
                 {
                     "id": "block_28",
-                    "type": "paragraph",
-                    "displayText": "*   Kí hiệu: P => Q",
-                    "latex": "P \\Rightarrow Q",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* Phát biểu:"
                 },
                 {
                     "id": "block_29",
-                    "type": "paragraph",
-                    "displayText": "*   Giả thiết Điều kiện cần"
+                    "type": "list",
+                    "displayText": "* Nếu P thì Q."
                 },
                 {
                     "id": "block_30",
-                    "type": "paragraph",
-                    "displayText": "*   Kết luận Điều kiện đủ"
+                    "type": "list",
+                    "displayText": "* P là điều kiện đủ để có Q."
                 },
                 {
                     "id": "block_31",
-                    "type": "paragraph",
-                    "displayText": "*   Tính đúng sai:"
+                    "type": "list",
+                    "displayText": "* Q là điều kiện cần để có P."
                 },
                 {
                     "id": "block_32",
-                    "type": "paragraph",
-                    "displayText": "*   Dựa vào các định lí."
+                    "type": "heading",
+                    "displayText": "Mệnh đề đảo"
                 },
                 {
                     "id": "block_33",
-                    "type": "paragraph",
-                    "displayText": "*   Phát biểu:"
+                    "type": "list",
+                    "displayText": "* Khái niệm: Mệnh đề Q => P được gọi là mệnh đề đảo của mệnh đề P => Q.",
+                    "latex": "Q \\Rightarrow P\\text{ được gọi là mệnh đề đảo của mệnh đề }P \\Rightarrow Q"
                 },
                 {
                     "id": "block_34",
-                    "type": "paragraph",
-                    "displayText": "*   Nếu P thì Q."
+                    "type": "list",
+                    "displayText": "* Kí hiệu: Tương tự mệnh đề kéo theo"
                 },
                 {
                     "id": "block_35",
-                    "type": "paragraph",
-                    "displayText": "*   P là điều kiện đủ để có Q."
+                    "type": "list",
+                    "displayText": "* Tính đúng sai: Mệnh đề đảo của mệnh đề đúng không nhất thiết là mệnh đề đúng."
                 },
                 {
                     "id": "block_36",
-                    "type": "paragraph",
-                    "displayText": "*   Q là điều kiện cần để có P."
+                    "type": "list",
+                    "displayText": "* Phát biểu: Tương tự mệnh đề kéo theo"
                 },
                 {
                     "id": "block_37",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề đảo",
-                    "theoremType": "definition"
+                    "type": "heading",
+                    "displayText": "Mệnh đề tương đương"
                 },
                 {
                     "id": "block_38",
-                    "type": "paragraph",
-                    "displayText": "*   Khái niệm: Mệnh đề Q => P được gọi là mệnh đề đảo của mệnh đề P => Q.",
-                    "latex": "Q \\Rightarrow P \\text{ được gọi là mệnh đề đảo của mệnh đề } P \\Rightarrow Q",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* Khái niệm: Mệnh đề \"P nếu và chỉ nếu Q\" được gọi là mệnh đề tương đương."
                 },
                 {
                     "id": "block_39",
-                    "type": "paragraph",
-                    "displayText": "*   Kí hiệu: Tương tự mệnh đề kéo theo"
+                    "type": "list",
+                    "displayText": "* Kí hiệu: P <=> Q.",
+                    "latex": "P \\Leftrightarrow Q"
                 },
                 {
                     "id": "block_40",
-                    "type": "paragraph",
-                    "displayText": "*   Tính đúng sai: Mệnh đề đảo của mệnh đề đúng không nhất thiết là mệnh đề đúng."
+                    "type": "list",
+                    "displayText": "* Tính đúng sai:"
                 },
                 {
                     "id": "block_41",
-                    "type": "paragraph",
-                    "displayText": "*   Phát biểu: Tương tự mệnh đề kéo theo"
+                    "type": "list",
+                    "displayText": "* Nếu cả hai mệnh đề P => Q và Q => P đều đúng thì mệnh đề tương đương đúng.",
+                    "latex": "\\text{Nếu cả hai mệnh đề }P \\Rightarrow Q\\text{ và }Q \\Rightarrow P\\text{ đều đúng thì mệnh đề tương đương đúng.}"
                 },
                 {
                     "id": "block_42",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề tương đương",
-                    "theoremType": "definition"
+                    "type": "list",
+                    "displayText": "* Phát biểu:"
                 },
                 {
                     "id": "block_43",
-                    "type": "paragraph",
-                    "displayText": "*   Khái niệm: Mệnh đề \"P nếu và chỉ nếu Q\" được gọi là mệnh đề tương đương."
+                    "type": "list",
+                    "displayText": "* \"P tương đương với Q\";"
                 },
                 {
                     "id": "block_44",
-                    "type": "paragraph",
-                    "displayText": "*   Kí hiệu: P <=> Q.",
-                    "latex": "P \\Leftrightarrow Q",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "list",
+                    "displayText": "* \"P là điều kiện cần và đủ để có Q\";"
                 },
                 {
                     "id": "block_45",
-                    "type": "paragraph",
-                    "displayText": "*   Tính đúng sai:"
+                    "type": "list",
+                    "displayText": "* \"P khi và chỉ khi Q\"."
                 },
                 {
                     "id": "block_46",
-                    "type": "paragraph",
-                    "displayText": "*   Nếu cả hai mệnh đề P => Q và Q => P đều đúng thì mệnh đề tương đương đúng.",
-                    "latex": "P \\Rightarrow Q \\text{ và } Q \\Rightarrow P",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "type": "heading",
+                    "displayText": "Mệnh đề chứa kí hiệu ∀, ∃"
                 },
                 {
                     "id": "block_47",
-                    "type": "paragraph",
-                    "displayText": "*   Phát biểu:"
+                    "type": "list",
+                    "displayText": "* Khái niệm: Như tên gọi."
                 },
                 {
                     "id": "block_48",
-                    "type": "paragraph",
-                    "displayText": "*   \"P tương đương với Q\";"
+                    "type": "list",
+                    "displayText": "* Kí hiệu: \"∀x ∈ X, P(x)\" \"∃x ∈ X, P(x)\"",
+                    "latex": "\\forall x \\in X, P(x)\\ \\exists x \\in X, P(x)"
                 },
                 {
                     "id": "block_49",
-                    "type": "paragraph",
-                    "displayText": "*   \"P là điều kiện cần và đủ để có Q\";"
+                    "type": "list",
+                    "displayText": "* Tính đúng sai:"
                 },
                 {
                     "id": "block_50",
                     "type": "paragraph",
-                    "displayText": "*   \"P khi và chỉ khi Q\"."
+                    "displayText": "Mệnh đề chứa kí hiệu ∀"
                 },
                 {
                     "id": "block_51",
-                    "type": "theorem",
-                    "displayText": "Mệnh đề chứa kí hiệu ∀, ∃",
-                    "theoremType": "definition"
+                    "type": "list",
+                    "displayText": "* Đúng: chứng minh P(x) đúng với mọi x ∈ X;"
                 },
                 {
                     "id": "block_52",
-                    "type": "paragraph",
-                    "displayText": "*   Khái niệm: Như tên gọi."
+                    "type": "list",
+                    "displayText": "* Sai: chỉ ra một trường hợp x ∈ X mà P(x) sai."
                 },
                 {
                     "id": "block_53",
                     "type": "paragraph",
-                    "displayText": "*   Kí hiệu: \"∀x ∈ X, P(x)\"\n    \"∃x ∈ X, P(x)\"",
-                    "latex": "\\forall x \\in X, P(x) \\\\ \\exists x \\in X, P(x)",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "displayText": "Mệnh đề chứa kí hiệu ∃"
                 },
                 {
                     "id": "block_54",
-                    "type": "paragraph",
-                    "displayText": "*   Tính đúng sai:"
+                    "type": "list",
+                    "displayText": "* Đúng: chỉ ra một trường hợp x ∈ X mà P(x) đúng."
                 },
                 {
                     "id": "block_55",
-                    "type": "paragraph",
-                    "displayText": "*   **Mệnh đề chứa kí hiệu ∀**"
+                    "type": "list",
+                    "displayText": "* Sai: chứng minh P(x) sai với mọi x ∈ X;"
                 },
                 {
                     "id": "block_56",
-                    "type": "paragraph",
-                    "displayText": "*   Đúng: chứng minh P(x) đúng với mọi x ∈ X;"
+                    "type": "list",
+                    "displayText": "* Phát biểu: Kí hiệu ∀ đọc là \"với mọi\". Kí hiệu ∃ đọc là \"tồn tại\".",
+                    "latex": "\\text{Kí hiệu }\\forall\\text{ đọc là \"với mọi\". Kí hiệu }\\exists\\text{ đọc là \"tồn tại\"}"
                 },
                 {
                     "id": "block_57",
                     "type": "paragraph",
-                    "displayText": "*   Sai: chỉ ra một trường hợp x ∈ X mà P(x) sai."
+                    "displayText": "Hệ thống giáo dục HOCMAI"
                 },
                 {
                     "id": "block_58",
                     "type": "paragraph",
-                    "displayText": "*   **Mệnh đề chứa kí hiệu ∃**"
+                    "displayText": "Tổng đài tư vấn: 1900 6933"
                 },
                 {
                     "id": "block_59",
                     "type": "paragraph",
-                    "displayText": "*   Đúng: chỉ ra một trường hợp x ∈ X mà P(x) đúng."
+                    "displayText": "https://TaiLieuOnThi.Net"
                 },
                 {
                     "id": "block_60",
                     "type": "paragraph",
-                    "displayText": "*   Sai: chứng minh P(x) sai với mọi x ∈ X;"
+                    "displayText": "- Trang | 1 -"
                 },
                 {
                     "id": "block_61",
                     "type": "paragraph",
-                    "displayText": "*   Phát biểu: Kí hiệu ∀ đọc là \"với mọi\"."
+                    "displayText": "Tài Liệu Ôn Thi Group"
                 },
                 {
                     "id": "block_62",
                     "type": "paragraph",
-                    "displayText": "*   Kí hiệu ∃ đọc là \"tồn tại\"."
+                    "displayText": "Hocmai.vn - Học chủ động - Sống tích cực"
                 },
                 {
                     "id": "block_63",
                     "type": "paragraph",
-                    "displayText": "Hệ thống giáo dục HOCMAI"
+                    "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
                 },
                 {
                     "id": "block_64",
                     "type": "paragraph",
-                    "displayText": "Tổng đài tư vấn: 1900 6933"
+                    "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
                 },
                 {
                     "id": "block_65",
                     "type": "paragraph",
-                    "displayText": "https://TaiLieuOnThi.Net"
+                    "displayText": "Vấn đề, ý chính, từ khóa, thắc mắc, nghi vấn"
                 },
                 {
                     "id": "block_66",
                     "type": "paragraph",
-                    "displayText": "- Trang | 1 -"
+                    "displayText": "Phần ghi chép"
                 },
                 {
                     "id": "block_67",
                     "type": "heading",
-                    "displayText": "Tài Liệu Ôn Thi Group"
+                    "displayText": "2. Các ví dụ"
                 },
                 {
                     "id": "block_68",
                     "type": "paragraph",
-                    "displayText": "Hocmai.vn - Học chủ động - Sống tích cực"
+                    "displayText": "Bài 1: Đánh dấu ✓ vào ô tương ứng, theo mẫu."
                 },
                 {
                     "id": "block_69",
-                    "type": "paragraph",
-                    "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
+                    "type": "table",
+                    "displayText": "| Câu | Không phải mệnh đề | Mệnh đề | Mệnh đề chưa biến ||| | | Đúng | Sai || Bài này dài quá! | ✓ | | | || Số 1 là số nguyên tố. | | | ✓ || Có bao nhiêu số tự nhiên có một chữ số? | | | | || n là một số chẵn. | | | | || Phương trình x² – 2x + 1 = 0 vô nghiệm. | | | | || x² + 1 ≥ 0. | | | | || ∀x ∈ ℝ, x² + 1 ≥ 0. | | | | || ∃x ∈ ℝ, x² + 1 < 0. | | | | || ........................................................................................ | | | | |",
+                    "latex": "\\begin{tabular}{|l|l|l|l|l|}\\hline\\text{Câu} & \\text{Không phải mệnh đề} & \\multicolumn{2}{|l|}{\\text{Mệnh đề}} & \\text{Mệnh đề chưa biến} \\\\\\cline{3-4}\\text{} & \\text{} & \\text{Đúng} & \\text{Sai} & \\text{} \\\\\\hline\\text{Bài này dài quá!} & \\checkmark & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Số 1 là số nguyên tố.} & \\text{} & \\text{} & \\checkmark & \\text{} \\\\\\hline\\text{Có bao nhiêu số tự nhiên có một chữ số?} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{n là một số chẵn.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Phương trình }x^2 - 2x + 1 = 0\\text{ vô nghiệm.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline x^2 + 1 \\geq 0. & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\forall x \\in \\mathbb{R}, x^2 + 1 \\geq 0. & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\exists x \\in \\mathbb{R}, x^2 + 1 < 0. & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{........................................................................................} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\end{tabular}"
                 },
                 {
                     "id": "block_70",
                     "type": "paragraph",
-                    "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
+                    "displayText": "Bài 2: Đánh dấu ✓ vào ô tương ứng."
                 },
                 {
                     "id": "block_71",
-                    "type": "paragraph",
-                    "displayText": "Vấn đề, ý chính,"
+                    "type": "table",
+                    "displayText": "| Câu | Không phải mệnh đề | Mệnh đề | Mệnh đề chưa biến ||| | | Đúng | Sai || Nếu n là số chẵn thì n² chia hết cho 4. | | | | || Hai góc bằng nhau là điều kiện cần để hai góc đối đỉnh. | | | | || Tứ giác là hình vuông khi và chỉ khi tứ giác có bốn cạnh bằng nhau. | | | | || Có một tam giác mà không có góc nào lớn hơn 60°. | | | | || Mọi số thực đều nhỏ hơn bình phương của chính nó. | | | | || ........................................................................................ | | | | || ........................................................................................ | | | | || ........................................................................................ | | | | |",
+                    "latex": "\\begin{tabular}{|l|l|l|l|l|}\\hline\\text{Câu} & \\text{Không phải mệnh đề} & \\multicolumn{2}{|l|}{\\text{Mệnh đề}} & \\text{Mệnh đề chưa biến} \\\\\\cline{3-4}\\text{} & \\text{} & \\text{Đúng} & \\text{Sai} & \\text{} \\\\\\hline\\text{Nếu n là số chẵn thì }n^2\\text{ chia hết cho 4.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Hai góc bằng nhau là điều kiện cần để hai góc đối đỉnh.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Tứ giác là hình vuông khi và chỉ khi tứ giác có bốn cạnh bằng nhau.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Có một tam giác mà không có góc nào lớn hơn }60^\\circ. & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{Mọi số thực đều nhỏ hơn bình phương của chính nó.} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{........................................................................................} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{........................................................................................} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\text{........................................................................................} & \\text{} & \\text{} & \\text{} & \\text{} \\\\\\hline\\end{tabular}"
                 },
                 {
                     "id": "block_72",
                     "type": "paragraph",
-                    "displayText": "từ khóa, thắc mắc,"
+                    "displayText": "Hệ thống giáo dục HOCMAI"
                 },
                 {
                     "id": "block_73",
                     "type": "paragraph",
-                    "displayText": "nghi vấn"
+                    "displayText": "Tổng đài tư vấn: 1900 6933 - Trang | 2 -"
                 },
                 {
                     "id": "block_74",
                     "type": "paragraph",
-                    "displayText": "Phần ghi chép"
+                    "displayText": "https://TaiLieuOnThi.Net"
                 },
                 {
                     "id": "block_75",
-                    "type": "heading",
-                    "displayText": "2. Các ví dụ"
+                    "type": "paragraph",
+                    "displayText": "Tài Liệu Ôn Thi Group"
                 },
                 {
                     "id": "block_76",
                     "type": "paragraph",
-                    "displayText": "Bài 1: Đánh dấu ✓ vào ô tương ứng, theo mẫu."
-                },
-                {
-                    "id": "block_77",
-                    "type": "table",
-                    "displayText": "| Câu | Không phải mệnh đề | Mệnh đề | Mệnh đề chưa biến |\n| :---------------------------------------------- | :------------------ | :---- | :---- |\n| | | Đúng | Sai |\n| Bài này dài quá! | ✓ | | |\n| Số 1 là số nguyên tố. | | | ✓ |\n| Có bao nhiêu số tự nhiên có một chữ số? | | | |\n| n là một số chẵn. | | | |\n| Phương trình x² – 2x + 1 = 0 vô nghiệm. | | | |\n| x² + 1 ≥ 0. | | | |\n| ∀x ∈ ℝ, x² + 1 ≥ 0. | | | |\n| ∃x ∈ ℝ, x² + 1 < 0. | | | |\n| ........................................................................................ | | | |",
-                    "latex": null,
-                    "mathType": null,
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
-                },
-                {
-                    "id": "block_78",
-                    "type": "paragraph",
-                    "displayText": "Bài 2: Đánh dấu ✓ vào ô tương ứng."
-                },
-                {
-                    "id": "block_79",
-                    "type": "table",
-                    "displayText": "| Câu | Không phải mệnh đề | Mệnh đề | Mệnh đề chưa biến |\n| :----------------------------------------------------------------- | :------------------ | :---- | :---- |\n| | | Đúng | Sai |\n| Nếu n là số chẵn thì n² chia hết cho 4. | | | |\n| Hai góc bằng nhau là điều kiện cần để hai góc đối đỉnh. | | | |\n| Tứ giác là hình vuông khi và chỉ khi tứ giác có bốn cạnh bằng nhau. | | | |\n| Có một tam giác mà không có góc nào lớn hơn 60°. | | | |\n| Mọi số thực đều nhỏ hơn bình phương của chính nó. | | | |\n| ........................................................................................ | | | |\n| ........................................................................................ | | | |\n| ........................................................................................ | | | |",
-                    "latex": null,
-                    "mathType": null,
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
-                },
-                {
-                    "id": "block_80",
-                    "type": "paragraph",
-                    "displayText": "Hệ thống giáo dục HOCMAI"
-                },
-                {
-                    "id": "block_81",
-                    "type": "paragraph",
-                    "displayText": "Tổng đài tư vấn: 1900 6933 - Trang | 2 -"
-                },
-                {
-                    "id": "block_82",
-                    "type": "paragraph",
-                    "displayText": "https://TaiLieuOnThi.Net"
-                },
-                {
-                    "id": "block_83",
-                    "type": "heading",
-                    "displayText": "Tài Liệu Ôn Thi Group"
-                },
-                {
-                    "id": "block_84",
-                    "type": "paragraph",
                     "displayText": "Hocmai.vn – Học chủ động – Sống tích cực"
                 },
                 {
-                    "id": "block_85",
+                    "id": "block_77",
                     "type": "paragraph",
                     "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
                 },
                 {
-                    "id": "block_86",
+                    "id": "block_78",
                     "type": "paragraph",
                     "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
                 },
                 {
-                    "id": "block_87",
-                    "type": "divider",
-                    "displayText": null,
-                    "latex": null,
-                    "mathType": null,
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "id": "block_79",
+                    "type": "divider"
                 },
                 {
-                    "id": "block_88",
+                    "id": "block_80",
                     "type": "paragraph",
-                    "displayText": "Vấn đề, ý chính,"
+                    "displayText": "Vấn đề, ý chính, từ khóa, thắc mắc, nghi vấn"
                 },
                 {
-                    "id": "block_89",
-                    "type": "paragraph",
-                    "displayText": "từ khóa, thắc mắc,"
-                },
-                {
-                    "id": "block_90",
-                    "type": "paragraph",
-                    "displayText": "nghi vấn"
-                },
-                {
-                    "id": "block_91",
+                    "id": "block_81",
                     "type": "paragraph",
                     "displayText": "Phần ghi chép"
                 },
                 {
-                    "id": "block_92",
+                    "id": "block_82",
                     "type": "heading",
                     "displayText": "Bài 3:"
                 },
                 {
-                    "id": "block_93",
+                    "id": "block_83",
                     "type": "paragraph",
                     "displayText": "Cho hai mệnh đề:"
                 },
                 {
-                    "id": "block_94",
+                    "id": "block_84",
                     "type": "paragraph",
-                    "displayText": "P: \"Tam giác ABC có góc A bằng 90°\";"
+                    "displayText": "P: \"Tam giác ABC có góc A bằng 90°\";",
+                    "latex": "P: \\text{\"Tam giác ABC có góc A bằng }90^\\circ\\text{\"};"
                 },
                 {
-                    "id": "block_95",
+                    "id": "block_85",
                     "type": "paragraph",
                     "displayText": "Q: \"Tam giác ABC có cạnh BC lớn nhất\"."
                 },
                 {
-                    "id": "block_96",
+                    "id": "block_86",
                     "type": "paragraph",
                     "displayText": "a) Lập mệnh đề P ⇒ Q;",
-                    "latex": "P \\Rightarrow Q",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "latex": "\\text{a) Lập mệnh đề }P \\Rightarrow Q;"
+                },
+                {
+                    "id": "block_87",
+                    "type": "paragraph",
+                    "displayText": "b) Lập mệnh đề đảo của mệnh đề P ⇒ Q và xác định tính đúng sai của mệnh đề đảo đó.",
+                    "latex": "\\text{b) Lập mệnh đề đảo của mệnh đề }P \\Rightarrow Q\\text{ và xác định tính đúng sai của mệnh đề đảo đó.}"
+                },
+                {
+                    "id": "block_88",
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
+                },
+                {
+                    "id": "block_89",
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
+                },
+                {
+                    "id": "block_90",
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
+                },
+                {
+                    "id": "block_91",
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
+                },
+                {
+                    "id": "block_92",
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
+                },
+                {
+                    "id": "block_93",
+                    "type": "heading",
+                    "displayText": "Bài 4:"
+                },
+                {
+                    "id": "block_94",
+                    "type": "paragraph",
+                    "displayText": "Viết mệnh đề phủ định của các mệnh đề sau:"
+                },
+                {
+                    "id": "block_95",
+                    "type": "paragraph",
+                    "displayText": "a) P: \"Tổng hai cạnh của một tam giác nhỏ hơn cạnh còn lại\";"
+                },
+                {
+                    "id": "block_96",
+                    "type": "paragraph",
+                    "displayText": "b) Q: \"Tồn tại hình bình hành là hình thoi\";"
                 },
                 {
                     "id": "block_97",
                     "type": "paragraph",
-                    "displayText": "b) Lập mệnh đề đảo của mệnh đề P ⇒ Q và xác định tính đúng sai của mệnh đề đảo đó.",
-                    "latex": "P \\Rightarrow Q",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "displayText": "c) R: \"∃x ∈ Z, x² + 1 = 4\";",
+                    "latex": "R: \\text{\"}\\exists x \\in \\mathbb{Z}, x^2 + 1 = 4\\text{\"};"
                 },
                 {
                     "id": "block_98",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "d) T: \"∀x ∈ R, x²⁰²² > x²\".",
+                    "latex": "T: \\text{\"}\\forall x \\in \\mathbb{R}, x^{2022} > x^2\\text{\"};"
                 },
                 {
                     "id": "block_99",
@@ -632,641 +555,825 @@
                 },
                 {
                     "id": "block_103",
-                    "type": "heading",
-                    "displayText": "Bài 4:"
+                    "type": "paragraph",
+                    "displayText": "................................................................................................................................................"
                 },
                 {
                     "id": "block_104",
                     "type": "paragraph",
-                    "displayText": "Viết mệnh đề phủ định của các mệnh đề sau:"
+                    "displayText": "................................................................................................................................................"
                 },
                 {
                     "id": "block_105",
                     "type": "paragraph",
-                    "displayText": "a) P: \"Tổng hai cạnh của một tam giác nhỏ hơn cạnh còn lại\";"
+                    "displayText": "Hệ thống giáo dục HOCMAI"
                 },
                 {
                     "id": "block_106",
                     "type": "paragraph",
-                    "displayText": "b) Q: \"Tồn tại hình bình hành là hình thoi\";"
+                    "displayText": "Tổng đài tư vấn: 1900 6933"
                 },
                 {
                     "id": "block_107",
                     "type": "paragraph",
-                    "displayText": "c) R: \"∃x ∈ Z, x² + 1 = 4\";",
-                    "latex": "\\exists x \\in \\mathbb{Z}, x^2 + 1 = 4",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "displayText": "- Trang | 3 -"
                 },
                 {
                     "id": "block_108",
                     "type": "paragraph",
-                    "displayText": "d) T: \"∀x ∈ R, x²⁰²² > x²\".",
-                    "latex": "\\forall x \\in \\mathbb{R}, x^{2022} > x^2",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "displayText": "https://TaiLieuOnThi.Net"
                 },
                 {
                     "id": "block_109",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "Tài Liệu Ôn Thi Group"
                 },
                 {
                     "id": "block_110",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "Hocmai.vn – Học chủ động - Sống tích cực"
                 },
                 {
                     "id": "block_111",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
                 },
                 {
                     "id": "block_112",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
                 },
                 {
                     "id": "block_113",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
+                    "displayText": "Vấn đề, ý chính, từ khóa, thắc mắc, nghi vấn"
                 },
                 {
                     "id": "block_114",
                     "type": "paragraph",
-                    "displayText": "................................................................................................................................................"
-                },
-                {
-                    "id": "block_115",
-                    "type": "paragraph",
-                    "displayText": "Hệ thống giáo dục HOCMAI"
-                },
-                {
-                    "id": "block_116",
-                    "type": "paragraph",
-                    "displayText": "Tổng đài tư vấn: 1900 6933"
-                },
-                {
-                    "id": "block_117",
-                    "type": "paragraph",
-                    "displayText": "- Trang | 3 -"
-                },
-                {
-                    "id": "block_118",
-                    "type": "paragraph",
-                    "displayText": "https://TaiLieuOnThi.Net"
-                },
-                {
-                    "id": "block_119",
-                    "type": "heading",
-                    "displayText": "Tài Liệu Ôn Thi Group"
-                },
-                {
-                    "id": "block_120",
-                    "type": "paragraph",
-                    "displayText": "Hocmai.vn – Học chủ động - Sống tích cực"
-                },
-                {
-                    "id": "block_121",
-                    "type": "paragraph",
-                    "displayText": "Khóa học Học tốt Toán 10 – Kết nối tri thức với cuộc sống"
-                },
-                {
-                    "id": "block_122",
-                    "type": "paragraph",
-                    "displayText": "Thầy Lưu Huy Thưởng – Thầy Nguyễn Mạnh Cường"
-                },
-                {
-                    "id": "block_123",
-                    "type": "paragraph",
-                    "displayText": "Vấn đề, ý chính,"
-                },
-                {
-                    "id": "block_124",
-                    "type": "paragraph",
-                    "displayText": "từ khóa, thắc mắc,"
-                },
-                {
-                    "id": "block_125",
-                    "type": "paragraph",
-                    "displayText": "nghi vấn"
-                },
-                {
-                    "id": "block_126",
-                    "type": "paragraph",
                     "displayText": "Phần ghi chép"
                 },
                 {
-                    "id": "block_127",
+                    "id": "block_115",
                     "type": "heading",
                     "displayText": "Bài 5:"
                 },
                 {
-                    "id": "block_128",
+                    "id": "block_116",
                     "type": "paragraph",
                     "displayText": "Phát biểu, xét tính đúng sai của các mệnh đề sau và viết mệnh đề phủ định của chúng."
                 },
                 {
-                    "id": "block_129",
+                    "id": "block_117",
                     "type": "paragraph",
                     "displayText": "a) \"∃x∈N, x² = 10\";",
-                    "latex": "\\exists x \\in \\mathbb{N}, x^2 = 10",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "latex": "\\text{a) \"}\\exists x\\in\\mathbb{N}, x^2 = 10\\text{\"};"
                 },
                 {
-                    "id": "block_130",
+                    "id": "block_118",
                     "type": "paragraph",
                     "displayText": "b) \"∀x∈R, x² – 4x + 5 ≥ 0\".",
-                    "latex": "\\forall x \\in \\mathbb{R}, x^2 - 4x + 5 \\geq 0",
-                    "mathType": "inline",
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "latex": "\\text{b) \"}\\forall x\\in\\mathbb{R}, x^2 - 4x + 5 \\geq 0\\text{\"};"
                 },
                 {
-                    "id": "block_131",
+                    "id": "block_119",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_132",
+                    "id": "block_120",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_133",
+                    "id": "block_121",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_134",
+                    "id": "block_122",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_135",
+                    "id": "block_123",
                     "type": "heading",
                     "displayText": "Bài 6:"
                 },
                 {
-                    "id": "block_136",
+                    "id": "block_124",
                     "type": "paragraph",
-                    "displayText": "Biết rằng khẳng định \"Nếu hôm nay trời mưa thì tôi ở nhà\" là sai."
+                    "displayText": "Biết rằng khẳng định \"Nếu hôm nay trời mưa thì tôi ở nhà\" là sai. Hỏi khẳng định nào sau đây đúng?"
                 },
                 {
-                    "id": "block_137",
-                    "type": "paragraph",
-                    "displayText": "Hỏi khẳng định nào sau đây đúng?"
-                },
-                {
-                    "id": "block_138",
+                    "id": "block_125",
                     "type": "table",
-                    "displayText": "| Khẳng định | Đúng | Sai |\n|------------------------------------------------|------|-----|\n| Nếu hôm nay trời không mưa thì tôi không ở nhà. |      |     |\n| Nếu hôm nay tôi không ở nhà thì trời không mưa. |      |     |\n| Nếu hôm nay trời mưa thì tôi không ở nhà. |      |     |\n| Hôm nay trời mưa nhưng tôi không ở nhà. |      |     |\n| Nếu hôm nay tôi ở nhà thì trời không mưa. |      |     |\n| Hôm nay tôi ở nhà nhưng trời không mưa. |      |     |",
-                    "latex": null,
-                    "mathType": null,
-                    "proofMethod": null,
-                    "qed": null,
-                    "theoremNumber": null,
-                    "theoremType": null
+                    "displayText": "| Khẳng định | Đúng | Sai ||------------------------------------------------|------|-----|| Nếu hôm nay trời không mưa thì tôi không ở nhà. | | || Nếu hôm nay tôi không ở nhà thì trời không mưa. | | || Nếu hôm nay trời mưa thì tôi không ở nhà. | | || Hôm nay trời mưa nhưng tôi không ở nhà. | | || Nếu hôm nay tôi ở nhà thì trời không mưa. | | || Hôm nay tôi ở nhà nhưng trời không mưa. | | |",
+                    "latex": "\\begin{tabular}{|l|l|l|}\\hline\\text{Khẳng định} & \\text{Đúng} & \\text{Sai} \\\\\\hline\\text{Nếu hôm nay trời không mưa thì tôi không ở nhà.} & \\text{} & \\text{} \\\\\\hline\\text{Nếu hôm nay tôi không ở nhà thì trời không mưa.} & \\text{} & \\text{} \\\\\\hline\\text{Nếu hôm nay trời mưa thì tôi không ở nhà.} & \\text{} & \\text{} \\\\\\hline\\text{Hôm nay trời mưa nhưng tôi không ở nhà.} & \\text{} & \\text{} \\\\\\hline\\text{Nếu hôm nay tôi ở nhà thì trời không mưa.} & \\text{} & \\text{} \\\\\\hline\\text{Hôm nay tôi ở nhà nhưng trời không mưa.} & \\text{} & \\text{} \\\\\\hline\\end{tabular}"
                 },
                 {
-                    "id": "block_139",
+                    "id": "block_126",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_140",
+                    "id": "block_127",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_141",
+                    "id": "block_128",
                     "type": "paragraph",
                     "displayText": "..........................................................................................."
                 },
                 {
-                    "id": "block_142",
+                    "id": "block_129",
                     "type": "heading",
                     "displayText": "Tổng kết"
                 },
                 {
-                    "id": "block_143",
+                    "id": "block_130",
                     "type": "paragraph",
                     "displayText": "Hệ thống giáo dục HOCMAI"
                 },
                 {
-                    "id": "block_144",
+                    "id": "block_131",
                     "type": "paragraph",
                     "displayText": "Giáo viên: Lưu Huy Thường – Nguyễn Mạnh Cường"
                 },
                 {
-                    "id": "block_145",
+                    "id": "block_132",
                     "type": "paragraph",
                     "displayText": "Nguồn: HOCMAI"
                 },
                 {
-                    "id": "block_146",
+                    "id": "block_133",
                     "type": "paragraph",
-                    "displayText": "Tổng đài tư vấn: 1900 6933                  - Trang | 4 -"
+                    "displayText": "Tổng đài tư vấn: 1900 6933 - Trang | 4 -"
                 },
                 {
-                    "id": "block_147",
+                    "id": "block_134",
                     "type": "paragraph",
                     "displayText": "https://TaiLieuOnThi.Net"
                 }
             ],
-            "version": "1.0",
-            "createdAt": "2024-07-30T12:00:00.000Z",
-            "updatedAt": "2024-07-30T12:00:00.000Z"
+            "version": "1.0.0",
+            "createdAt": "2024-07-30T12:00:00Z",
+            "updatedAt": "2024-07-30T12:00:00Z"
         },
         "tiptap": {
             "type": "doc",
             "content": [
                 {
-                    "type": "heading",
-                    "attrs": {
-                        "level": 1
-                    },
-                    "content": []
-                },
-                {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "heading",
-                    "attrs": {
-                        "level": 1
-                    },
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "heading",
-                    "attrs": {
-                        "level": 1
-                    },
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
                     "content": [
                         {
-                            "type": "paragraph",
-                            "content": []
+                            "type": "text",
+                            "text": "[Empty content]"
                         }
                     ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
                     "content": [
                         {
-                            "type": "paragraph",
-                            "content": []
+                            "type": "text",
+                            "text": "[Empty content]"
                         }
                     ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
                     "content": [
                         {
-                            "type": "paragraph",
-                            "content": []
+                            "type": "text",
+                            "text": "[Empty content]"
                         }
                     ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
                     "content": [
                         {
-                            "type": "paragraph",
-                            "content": []
+                            "type": "text",
+                            "text": "[Empty content]"
                         }
                     ]
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
-                    "content": [
-                        {
-                            "type": "paragraph",
-                            "content": []
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
-                    "content": [
-                        {
-                            "type": "paragraph",
-                            "content": []
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "theorem",
-                    "attrs": {
-                        "theoremType": "definition"
-                    },
-                    "content": [
-                        {
-                            "type": "paragraph",
-                            "content": []
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "heading",
+                    "attrs": {
+                        "level": 1
+                    },
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
@@ -1279,7 +1386,12 @@
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
@@ -1292,34 +1404,66 @@
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "heading",
-                    "attrs": {
-                        "level": 1
-                    },
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "horizontalRule",
@@ -1329,218 +1473,420 @@
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "heading",
-                    "attrs": {
-                        "level": 1
-                    },
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
-                },
-                {
-                    "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
@@ -1553,50 +1899,95 @@
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "heading",
                     "attrs": {
                         "level": 1
                     },
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 },
                 {
                     "type": "paragraph",
-                    "content": []
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "[Empty content]"
+                        }
+                    ]
                 }
             ]
         },
         "metadata": {
-            "processingTime": 104779,
+            "processingTime": 49494,
             "textLength": 9236,
-            "blockCount": 147,
-            "confidenceScore": 0.95,
+            "blockCount": 135,
+            "confidenceScore": 0.9,
             "documentType": "mathematical",
             "hasMatematicalContent": true,
             "mathAnalysis": {
@@ -1612,12 +2003,11 @@
                 "hasAcademicStructure": true,
                 "footnoteCount": 0,
                 "citationCount": 0,
-                "theoremCount": 7,
+                "theoremCount": 0,
                 "proofCount": 0,
                 "hasReferences": false,
                 "structureElements": [
-                    "structured-headings",
-                    "theorems"
+                    "structured-headings"
                 ]
             },
             "processingStrategy": "math-enhanced",
