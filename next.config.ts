@@ -1,3 +1,5 @@
+// UPDATED: 08-07-2025 - Removed VNTK and crfsuite externals, simplified webpack config
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,9 +14,6 @@ const nextConfig: NextConfig = {
         "pdf-parse": "commonjs pdf-parse",
         "pdf2pic": "commonjs pdf2pic",
         "sharp": "commonjs sharp",
-        "vntk": "commonjs vntk",
-        "crfsuite": "commonjs crfsuite",
-        "node-pre-gyp": "commonjs node-pre-gyp",
         "fast-password-entropy": "commonjs fast-password-entropy",
       });
     }
@@ -46,7 +45,6 @@ const nextConfig: NextConfig = {
       events: false,
       string_decoder: false,
       'aws-sdk': false, // Prevent aws-sdk from being bundled for client-side
-      'node-pre-gyp': false, // Prevent node-pre-gyp from being bundled
     };
 
     // Additional externals for server-side only dependencies  
@@ -62,7 +60,7 @@ const nextConfig: NextConfig = {
   },
 
   // Enable experimental features for better compatibility
-  serverExternalPackages: ["pdf-parse", "pdf2pic", "sharp", "vntk", "crfsuite", "node-pre-gyp", "fast-password-entropy"],
+  serverExternalPackages: ["pdf-parse", "pdf2pic", "sharp", "fast-password-entropy"],
   
   // Handle image domains for processing
   images: {

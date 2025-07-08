@@ -620,7 +620,7 @@ export async function GET(): Promise<NextResponse> {
           validation: {
             enabled: OCR_CONFIG.ENABLE_TEXT_VALIDATION,
             confidenceThreshold: OCR_CONFIG.OCR_TRIGGER_CONFIDENCE_THRESHOLD,
-            minSyllableDensity: OCR_CONFIG.MIN_SYLLABLE_DENSITY,
+            minWordDensity: OCR_CONFIG.MIN_WORD_DENSITY,
             minTextEntropy: OCR_CONFIG.MIN_TEXT_ENTROPY,
             minWordCount: OCR_CONFIG.MIN_WORD_COUNT,
           },

@@ -1,6 +1,7 @@
-// UPDATED: 08-07-2025 - Added client-side warnings and improved server-side checks
+// UPDATED: 08-07-2025 - Removed VNTK dependency completely, simplified universal text validation
+// src/lib/utils/text-validation.ts
 
-// OCR v2.0 Text Quality Validation System
+// Universal Text Quality Validation System (No Vietnamese-specific dependencies)
 
 import { OCR_CONFIG } from "@/types/ocr";
 
@@ -11,94 +12,63 @@ export interface TextValidationResult {
   reason: string;
   metrics: {
     charLength: number;
-    syllableCount: number;
-    syllableDensity: number;
-    entropy: number;
     wordCount: number;
+    wordDensity: number; // Renamed from syllableDensity
+    entropy: number;
     uniqueCharCount: number;
     repetitivePatterns: boolean;
+    averageWordLength: number; // New metric
   };
 }
 
 // Interface for validation configuration
 export interface ValidationConfig {
   minAbsoluteLength: number;
-  minSyllableCount: number;
-  minSyllableDensity: number;
-  minTextEntropy: number;
   minWordCount: number;
+  minWordDensity: number; // Renamed from syllableDensity
+  minTextEntropy: number;
+  minAverageWordLength: number; // New threshold
   confidenceThreshold: number;
 }
 
 /**
- * Enhanced text quality validation using multiple heuristics
+ * Universal text quality validation using language-agnostic heuristics
  * Designed to detect meaningless content like dots, repetitive patterns, etc.
- * @warning This class should only be used on server-side (Node.js environment)
+ * Works for all languages without specific NLP dependencies.
  */
 export class TextQualityValidator {
   private config: ValidationConfig;
-  private vntkAvailable: boolean = false;
   private entropyCalculator: any = null;
-  private isServerSide: boolean;
 
   constructor(config?: Partial<ValidationConfig>) {
-    // ✅ IMPROVED: Better client-side detection and warning
-    this.isServerSide = typeof window === 'undefined';
-    
-    if (!this.isServerSide) {
-      console.warn(
-        '⚠️ TextQualityValidator: This class is designed for server-side use only. ' +
-        'VNTK and other Node.js dependencies may not work properly in browser environment.'
-      );
-    }
-
     this.config = {
       minAbsoluteLength: OCR_CONFIG.MIN_ABSOLUTE_LENGTH || 10,
-      minSyllableCount: OCR_CONFIG.MIN_SYLLABLE_COUNT || 3,
-      minSyllableDensity: OCR_CONFIG.MIN_SYLLABLE_DENSITY || 0.05,
-      minTextEntropy: OCR_CONFIG.MIN_TEXT_ENTROPY || 1.5,
       minWordCount: OCR_CONFIG.MIN_WORD_COUNT || 3,
+      minWordDensity: OCR_CONFIG.MIN_WORD_DENSITY || 0.05, // Universal word density
+      minTextEntropy: OCR_CONFIG.MIN_TEXT_ENTROPY || 1.5,
+      minAverageWordLength: OCR_CONFIG.MIN_AVERAGE_WORD_LENGTH || 2.5,
       confidenceThreshold: OCR_CONFIG.OCR_TRIGGER_CONFIDENCE_THRESHOLD || 0.5,
       ...config,
     };
 
-    // Only initialize dependencies on server-side
-    if (this.isServerSide) {
-      this.initializeDependencies();
-    }
+    // Only initialize entropy calculator if available
+    this.initializeEntropy();
   }
 
   /**
-   * Initialize optional dependencies (vntk, fast-password-entropy)
-   * Only loads on server-side environment
+   * Initialize entropy calculator (optional dependency)
    */
-  private async initializeDependencies(): Promise<void> {
-    // ✅ IMPROVED: Double-check server-side environment
-    if (!this.isServerSide) {
-      console.warn(
-        "⚠️ TextQualityValidator: Server-side dependencies not available in browser environment"
-      );
-      return;
+  private async initializeEntropy(): Promise<void> {
+    // Only try to load fast-password-entropy on server-side
+    if (typeof window !== 'undefined') {
+      return; // Skip on client-side
     }
 
     try {
-      // Try to load fast-password-entropy for entropy calculation
       const stringEntropy = await import("fast-password-entropy");
       this.entropyCalculator = stringEntropy.default;
-      console.log("✅ TextQualityValidator: fast-password-entropy loaded successfully");
     } catch (error) {
-      console.warn(
-        "⚠️ TextQualityValidator: fast-password-entropy not available, using fallback entropy calculation"
-      );
-    }
-
-    try {
-      // Try to load vntk for Vietnamese text processing
-      const vntk = await import("vntk");
-      this.vntkAvailable = true;
-      console.log("✅ TextQualityValidator: VNTK loaded successfully for Vietnamese text processing");
-    } catch (error) {
-      console.warn("⚠️ TextQualityValidator: VNTK not available, using fallback word segmentation");
+      // Silent fallback - no warnings needed
     }
   }
 
@@ -107,17 +77,7 @@ export class TextQualityValidator {
    * @param text - Text to validate
    * @returns Promise<TextValidationResult>
    */
-  public async validateTextQuality(
-    text: string
-  ): Promise<TextValidationResult> {
-    // ✅ IMPROVED: Early client-side fallback
-    if (!this.isServerSide) {
-      console.warn(
-        "⚠️ TextQualityValidator: validateTextQuality called on client-side, using simplified validation"
-      );
-      return this.createClientSideFallbackResult(text);
-    }
-
+  public async validateTextQuality(text: string): Promise<TextValidationResult> {
     // Normalize and clean text
     const normalizedText = this.normalizeText(text);
 
@@ -130,7 +90,7 @@ export class TextQualityValidator {
     }
 
     // Calculate all metrics
-    const metrics = await this.calculateMetrics(normalizedText);
+    const metrics = this.calculateMetrics(normalizedText);
 
     // Apply validation rules and calculate confidence
     const { confidence, reason } = this.applyValidationRules(metrics);
@@ -146,46 +106,23 @@ export class TextQualityValidator {
   }
 
   /**
-   * ✅ NEW: Client-side fallback validation (simple heuristics only)
+   * Calculate comprehensive text metrics (universal approach)
    */
-  private createClientSideFallbackResult(text: string): TextValidationResult {
-    const normalizedText = this.normalizeText(text);
-    
-    // Simple client-side validation without VNTK
-    const isValid = normalizedText.length >= OCR_CONFIG.MIN_TEXT_LENGTH_FOR_TEXT_BASED;
-    
-    return {
-      confidence: isValid ? 0.7 : 0.3, // Conservative confidence scores
-      isValid,
-      reason: `Client-side fallback: ${isValid ? 'Text length acceptable' : 'Text too short'}`,
-      metrics: {
-        charLength: normalizedText.length,
-        syllableCount: 0, // Not calculated on client-side
-        syllableDensity: 0, // Not calculated on client-side
-        entropy: 0, // Not calculated on client-side
-        wordCount: normalizedText.split(/\s+/).length,
-        uniqueCharCount: new Set(normalizedText.toLowerCase()).size,
-        repetitivePatterns: false, // Simplified check
-      },
-    };
-  }
-
-  /**
-   * Calculate comprehensive text metrics
-   */
-  private async calculateMetrics(
-    text: string
-  ): Promise<TextValidationResult["metrics"]> {
+  private calculateMetrics(text: string): TextValidationResult["metrics"] {
     const charLength = text.length;
 
     // Calculate entropy (randomness measure)
     const entropy = this.calculateEntropy(text);
 
-    // Calculate word and syllable counts
-    const { wordCount, syllableCount } = await this.calculateWordMetrics(text);
+    // Universal word analysis
+    const words = this.extractWords(text);
+    const wordCount = words.length;
+    const averageWordLength = wordCount > 0 
+      ? words.reduce((sum, word) => sum + word.length, 0) / wordCount 
+      : 0;
 
-    // Calculate syllable density (key metric for Vietnamese text)
-    const syllableDensity = charLength > 0 ? syllableCount / charLength : 0;
+    // Calculate word density (universal alternative to syllable density)
+    const wordDensity = charLength > 0 ? wordCount / charLength : 0;
 
     // Count unique characters
     const uniqueCharCount = new Set(text.toLowerCase()).size;
@@ -195,12 +132,12 @@ export class TextQualityValidator {
 
     return {
       charLength,
-      syllableCount,
-      syllableDensity,
-      entropy,
       wordCount,
+      wordDensity,
+      entropy,
       uniqueCharCount,
       repetitivePatterns,
+      averageWordLength,
     };
   }
 
@@ -214,40 +151,48 @@ export class TextQualityValidator {
     let confidence = 1.0;
     let reason = "Valid text content";
 
-    // RULE 1: Syllable density check (most critical for Vietnamese)
-    if (metrics.syllableDensity < this.config.minSyllableDensity) {
+    // RULE 1: Word density check (universal alternative to syllable density)
+    if (metrics.wordDensity < this.config.minWordDensity) {
       return {
-        confidence: 0,
-        reason: `Critical: Very low syllable density (${metrics.syllableDensity.toFixed(
+        confidence: 0.1,
+        reason: `Critical: Very low word density (${metrics.wordDensity.toFixed(
           4
-        )}). Likely meaningless content.`,
+        )}). Likely meaningless content or pattern.`,
       };
     }
 
-    // RULE 2: Entropy check (detects repetitive patterns)
+    // RULE 2: Word count check
+    if (metrics.wordCount < this.config.minWordCount) {
+      confidence -= 0.5;
+      reason = `Low word count (${metrics.wordCount}). May not contain meaningful content.`;
+    }
+
+    // RULE 3: Average word length check (too short = gibberish, too long = corrupted)
+    if (metrics.averageWordLength < this.config.minAverageWordLength) {
+      confidence -= 0.3;
+      reason = `Very short average word length (${metrics.averageWordLength.toFixed(1)}). Likely fragmented text.`;
+    } else if (metrics.averageWordLength > 15) {
+      confidence -= 0.4;
+      reason = `Unusually long average word length (${metrics.averageWordLength.toFixed(1)}). Likely corrupted text.`;
+    }
+
+    // RULE 4: Entropy check (detects repetitive patterns)
     if (metrics.entropy < this.config.minTextEntropy) {
-      confidence -= 0.6;
+      confidence -= 0.4;
       reason = `Low entropy (${metrics.entropy.toFixed(
         2
       )}) suggests repetitive or patterned text.`;
     }
 
-    // RULE 3: Word count check
-    if (metrics.wordCount < this.config.minWordCount) {
-      confidence -= 0.4;
-      reason = `Low word count (${metrics.wordCount}). May not contain meaningful content.`;
-    }
-
-    // RULE 4: Repetitive pattern detection
+    // RULE 5: Repetitive pattern detection
     if (metrics.repetitivePatterns) {
       confidence -= 0.3;
       reason = `Repetitive patterns detected. Likely generated or meaningless content.`;
     }
 
-    // RULE 5: Character diversity check
-    const diversityRatio =
-      metrics.uniqueCharCount / Math.min(metrics.charLength, 50);
-    if (diversityRatio < 0.3) {
+    // RULE 6: Character diversity check
+    const diversityRatio = metrics.uniqueCharCount / Math.min(metrics.charLength, 50);
+    if (diversityRatio < 0.25) {
       confidence -= 0.2;
       reason = `Low character diversity (${diversityRatio.toFixed(
         2
@@ -261,6 +206,20 @@ export class TextQualityValidator {
   }
 
   /**
+   * Extract words using universal approach (works for most languages)
+   */
+  private extractWords(text: string): string[] {
+    // Universal word extraction using Unicode word boundaries
+    return text
+      .toLowerCase()
+      .split(/[\s\p{P}\p{S}]+/u) // Split on whitespace, punctuation, symbols
+      .filter(word => 
+        word.length > 0 && 
+        /\p{L}/u.test(word) // Contains at least one letter (any language)
+      );
+  }
+
+  /**
    * Calculate text entropy using fast-password-entropy or fallback
    */
   private calculateEntropy(text: string): number {
@@ -268,16 +227,16 @@ export class TextQualityValidator {
       try {
         return this.entropyCalculator(text) / 10; // Normalize to reasonable range
       } catch (error) {
-        console.warn("⚠️ TextQualityValidator: Entropy calculation failed, using fallback");
+        // Silent fallback
       }
     }
 
-    // Fallback entropy calculation
+    // Fallback entropy calculation (Shannon entropy)
     return this.calculateFallbackEntropy(text);
   }
 
   /**
-   * Fallback entropy calculation when fast-password-entropy is not available
+   * Fallback entropy calculation (Shannon entropy)
    */
   private calculateFallbackEntropy(text: string): number {
     const freq: { [key: string]: number } = {};
@@ -297,80 +256,6 @@ export class TextQualityValidator {
     }
 
     return entropy;
-  }
-
-  /**
-   * Calculate word and syllable counts with Vietnamese support
-   */
-  private async calculateWordMetrics(
-    text: string
-  ): Promise<{ wordCount: number; syllableCount: number }> {
-    if (this.vntkAvailable && this.isServerSide) {
-      return await this.calculateVietnameseMetrics(text);
-    }
-
-    // Fallback for English/general text
-    return this.calculateFallbackMetrics(text);
-  }
-
-  /**
-   * Calculate metrics using VNTK for Vietnamese text
-   */
-  private async calculateVietnameseMetrics(
-    text: string
-  ): Promise<{ wordCount: number; syllableCount: number }> {
-    // ✅ IMPROVED: Double-check server-side environment
-    if (!this.isServerSide) {
-      console.warn("⚠️ TextQualityValidator: VNTK is server-side only, using fallback");
-      return this.calculateFallbackMetrics(text);
-    }
-
-    try {
-      const vntk = await import("vntk");
-      const tokenizer = vntk.wordTokenizer();
-      const tokens = tokenizer.tag(text);
-
-      return {
-        wordCount: tokens.length,
-        syllableCount: tokens.length, // In Vietnamese, words are typically syllables
-      };
-    } catch (error) {
-      console.warn("⚠️ TextQualityValidator: VNTK processing failed, using fallback");
-      return this.calculateFallbackMetrics(text);
-    }
-  }
-
-  /**
-   * Fallback metrics calculation for general text
-   */
-  private calculateFallbackMetrics(text: string): {
-    wordCount: number;
-    syllableCount: number;
-  } {
-    // Simple word splitting for non-Vietnamese text
-    const words = text
-      .trim()
-      .split(/\s+/)
-      .filter((word) => word.length > 0 && /[a-zA-ZÀ-ỹ]/.test(word));
-
-    // Estimate syllables (rough approximation)
-    const estimatedSyllables = words.reduce((count, word) => {
-      return (
-        count +
-        Math.max(
-          1,
-          word.replace(
-            /[^aeiouàáạảãêếệểễèìíịỉĩòóọỏõôốộổỗơớợởỡùúụủũưứựửữyýỵỷỹ]/gi,
-            ""
-          ).length
-        )
-      );
-    }, 0);
-
-    return {
-      wordCount: words.length,
-      syllableCount: estimatedSyllables,
-    };
   }
 
   /**
@@ -395,6 +280,21 @@ export class TextQualityValidator {
       }
     }
 
+    // Check for excessive repetition of the same word
+    const words = this.extractWords(text);
+    if (words.length > 0) {
+      const wordFreq: { [key: string]: number } = {};
+      for (const word of words) {
+        wordFreq[word] = (wordFreq[word] || 0) + 1;
+      }
+      
+      // If any word appears more than 30% of the time, it's likely repetitive
+      const maxFreq = Math.max(...Object.values(wordFreq));
+      if (maxFreq / words.length > 0.3) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -416,18 +316,22 @@ export class TextQualityValidator {
     reason: string,
     partialMetrics: Partial<TextValidationResult["metrics"]> = {}
   ): TextValidationResult {
+    const words = this.extractWords(text);
+    
     return {
       confidence: 0,
       isValid: false,
       reason,
       metrics: {
         charLength: text.length,
-        syllableCount: 0,
-        syllableDensity: 0,
+        wordCount: words.length,
+        wordDensity: words.length / (text.length || 1),
         entropy: 0,
-        wordCount: 0,
-        uniqueCharCount: 0,
+        uniqueCharCount: new Set(text.toLowerCase()).size,
         repetitivePatterns: false,
+        averageWordLength: words.length > 0 
+          ? words.reduce((sum, w) => sum + w.length, 0) / words.length 
+          : 0,
         ...partialMetrics,
       },
     };

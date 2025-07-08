@@ -1,4 +1,4 @@
-// 2025-01-27 - Added OCR v2.0 text quality validation configuration
+// UPDATED: 08-07-2025 - Removed VNTK-specific configurations, simplified universal text validation
 
 import { z } from "zod";
 
@@ -47,14 +47,14 @@ export interface HybridPdfMetadata {
   title?: string;
   author?: string;
   creator?: string;
-  // OCR v2.0: Text quality validation metadata
-  validationEnabled?: boolean;
+  // Text quality validation metadata
+  validationEnabled: boolean;
   averageConfidence?: number;
   validationTime?: number;
 }
 
 // =============================================================================
-// OCR v2.0: Text Quality Validation Types
+// Universal Text Quality Validation Types (VNTK removed)
 // =============================================================================
 
 export interface TextValidationResult {
@@ -63,21 +63,21 @@ export interface TextValidationResult {
   reason: string;
   metrics: {
     charLength: number;
-    syllableCount: number;
-    syllableDensity: number;
-    entropy: number;
     wordCount: number;
+    wordDensity: number; // Universal alternative to syllable density
+    entropy: number;
     uniqueCharCount: number;
     repetitivePatterns: boolean;
+    averageWordLength: number;
   };
 }
 
 export interface ValidationConfig {
   minAbsoluteLength: number;
-  minSyllableCount: number;
-  minSyllableDensity: number;
-  minTextEntropy: number;
   minWordCount: number;
+  minWordDensity: number; // Universal word density threshold
+  minTextEntropy: number;
+  minAverageWordLength: number;
   confidenceThreshold: number;
 }
 
@@ -91,7 +91,6 @@ export interface PageClassification {
   textLength: number;
   needsOcr: boolean;
   text?: string;
-  // OCR v2.0: Validation result for the page
   validationResult?: TextValidationResult;
 }
 
@@ -127,7 +126,6 @@ export interface OcrServiceConfig {
   timeout: number;
   batchSize: number;
   enableCache: boolean;
-  // OCR v2.0: Text validation configuration
   enableTextValidation?: boolean;
   validationConfig?: Partial<ValidationConfig>;
 }
@@ -181,8 +179,7 @@ const HybridPdfResultSchema = z.object({
       title: z.string().optional(),
       author: z.string().optional(),
       creator: z.string().optional(),
-      // OCR v2.0: Validation metadata
-      validationEnabled: z.boolean().optional(),
+      validationEnabled: z.boolean(),
       averageConfidence: z.number().optional(),
       validationTime: z.number().optional(),
     }),
@@ -199,19 +196,18 @@ const HybridPdfResultSchema = z.object({
   details: z.any().optional(),
 });
 
-// OCR v2.0: Text validation schema
 const TextValidationResultSchema = z.object({
   confidence: z.number().min(0).max(1),
   isValid: z.boolean(),
   reason: z.string(),
   metrics: z.object({
     charLength: z.number(),
-    syllableCount: z.number(),
-    syllableDensity: z.number(),
-    entropy: z.number(),
     wordCount: z.number(),
+    wordDensity: z.number(),
+    entropy: z.number(),
     uniqueCharCount: z.number(),
     repetitivePatterns: z.boolean(),
+    averageWordLength: z.number(),
   }),
 });
 
@@ -232,7 +228,7 @@ export const validateTextValidationResult = (result: unknown): TextValidationRes
 };
 
 // =============================================================================
-// Enhanced OCR Configuration Constants
+// Universal OCR Configuration Constants (VNTK removed)
 // =============================================================================
 
 export const OCR_CONFIG = {
@@ -248,19 +244,19 @@ export const OCR_CONFIG = {
   MAX_IMAGE_SIZE: 4000,
   MIN_IMAGE_SIZE: 100,
   
-  // Text Detection Thresholds with OCR v2.0 enhancements
-  MIN_TEXT_LENGTH_FOR_TEXT_BASED: 50, // Legacy threshold (kept for backward compatibility)
-  MIN_TEXT_LENGTH_PER_PAGE: 20, // Legacy threshold (kept for backward compatibility)
+  // Legacy Text Detection Thresholds (kept for backward compatibility)
+  MIN_TEXT_LENGTH_FOR_TEXT_BASED: 50,
+  MIN_TEXT_LENGTH_PER_PAGE: 20,
   
-  // OCR v2.0: Text Quality Validation Thresholds
-  ENABLE_TEXT_VALIDATION: true, // Feature flag for new validation system
-  OCR_TRIGGER_CONFIDENCE_THRESHOLD: 0.5, // Confidence below this triggers OCR
-  MIN_ABSOLUTE_LENGTH: 10, // Minimum characters for any analysis
-  MIN_SYLLABLE_COUNT: 3, // Minimum meaningful syllables/words
-  MIN_SYLLABLE_DENSITY: 0.05, // Critical metric: syllables per character (Vietnamese-optimized)
-  MIN_TEXT_ENTROPY: 1.5, // Minimum entropy to detect repetitive patterns
-  MIN_WORD_COUNT: 3, // Minimum actual words detected
-  MIN_UNIQUE_CHAR_RATIO: 0.3, // Minimum character diversity ratio
+  // Universal Text Quality Validation Thresholds (VNTK removed)
+  ENABLE_TEXT_VALIDATION: true,
+  OCR_TRIGGER_CONFIDENCE_THRESHOLD: 0.5,
+  MIN_ABSOLUTE_LENGTH: 10,
+  MIN_WORD_COUNT: 3,
+  MIN_WORD_DENSITY: 0.05, // Universal word density (words per character)
+  MIN_TEXT_ENTROPY: 1.5,
+  MIN_AVERAGE_WORD_LENGTH: 2.5, // Minimum average word length
+  MIN_UNIQUE_CHAR_RATIO: 0.25, // Minimum character diversity ratio
   
   // Quality Settings
   IMAGE_QUALITY: 95,
@@ -271,7 +267,7 @@ export const OCR_CONFIG = {
   MAX_FILE_SIZE: 50 * 1024 * 1024, // 50MB
   MAX_PAGES: 100,
   
-  // OCR v2.0: Performance Settings for Validation
+  // Performance Settings for Validation
   VALIDATION_TIMEOUT: 5000, // Maximum time for text validation (5s)
   ENABLE_VALIDATION_CACHE: true, // Cache validation results for identical text
   LOG_VALIDATION_DECISIONS: true, // Log OCR trigger decisions for debugging
@@ -343,7 +339,6 @@ export class GeminiVisionError extends Error {
   }
 }
 
-// OCR v2.0: Text validation specific errors
 export class TextValidationError extends Error {
   constructor(message: string, public cause?: Error) {
     super(message);

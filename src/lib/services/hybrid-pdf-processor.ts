@@ -1,6 +1,6 @@
-// Integrated OCR v2.0 text quality validation system
+// Universal Text Quality Validation System (No language-specific dependencies)
 
-// UPDATED: 08-07-2025 - Fixed VNTK client-side import issue in checkIfPdfNeedsOcr function
+// UPDATED: 08-07-2025 - Removed VNTK dependency, simplified universal text validation
 
 import pdf from "pdf-parse";
 import { fromBuffer } from "pdf2pic";
@@ -22,7 +22,7 @@ import {
 } from "@/types/ocr";
 
 // =============================================================================
-// Enhanced Hybrid PDF Processor - Intelligent Workflow Implementation v2.0
+// Enhanced Hybrid PDF Processor - Universal Text Validation
 // =============================================================================
 
 export class HybridPdfProcessor {
@@ -33,13 +33,12 @@ export class HybridPdfProcessor {
     minTextLengthPerPage: number;
     maxPagesParallel: number;
     enableOptimization: boolean;
-    // OCR v2.0: Text validation configuration
     enableTextValidation: boolean;
     validationTimeoutMs: number;
     logValidationDecisions: boolean;
   };
 
-  // OCR v2.0: Performance tracking for validation
+  // Performance tracking for validation
   private validationStats = {
     totalValidations: 0,
     totalValidationTime: 0,
@@ -62,7 +61,6 @@ export class HybridPdfProcessor {
       minTextLengthPerPage: OCR_CONFIG.MIN_TEXT_LENGTH_PER_PAGE,
       maxPagesParallel: OCR_CONFIG.MAX_PAGES_PARALLEL,
       enableOptimization: true,
-      // OCR v2.0 configuration
       enableTextValidation: OCR_CONFIG.ENABLE_TEXT_VALIDATION,
       validationTimeoutMs: OCR_CONFIG.VALIDATION_TIMEOUT,
       logValidationDecisions: OCR_CONFIG.LOG_VALIDATION_DECISIONS,
@@ -73,8 +71,8 @@ export class HybridPdfProcessor {
   }
 
   /**
-   * Process PDF using the Enhanced Intelligent Hybrid Workflow v2.0
-   * OCR v2.0: Integrated text quality validation for accurate OCR triggering
+   * Process PDF using the Enhanced Intelligent Hybrid Workflow
+   * Universal text quality validation for accurate OCR triggering
    */
   async processHybridPdf(
     pdfBuffer: Buffer,
@@ -85,7 +83,7 @@ export class HybridPdfProcessor {
 
     try {
       console.log(
-        `🔍 Starting Enhanced Hybrid PDF processing v2.0 for: ${filename}`
+        `🔍 Starting Enhanced Hybrid PDF processing for: ${filename}`
       );
       console.log(
         `📊 Text validation: ${
@@ -164,11 +162,11 @@ export class HybridPdfProcessor {
   }
 
   // =============================================================================
-  // Step 1: Enhanced Initial Check with Text Quality Validation
+  // Step 1: Enhanced Initial Check with Universal Text Quality Validation
   // =============================================================================
 
   /**
-   * OCR v2.0: Enhanced initial check with intelligent text quality validation
+   * Enhanced initial check with intelligent text quality validation
    */
   private async performEnhancedInitialCheck(pdfBuffer: Buffer): Promise<{
     type: "text" | "scan_or_hybrid";
@@ -203,7 +201,7 @@ export class HybridPdfProcessor {
         }
       }
 
-      // OCR v2.0: Perform text quality validation
+      // Perform universal text quality validation
       const validationResult = await this.performTextValidation(
         extractedText,
         "initial-check"
@@ -231,7 +229,7 @@ export class HybridPdfProcessor {
         this.validationStats.ocrTriggeredByValidation++;
         return {
           type: "scan_or_hybrid",
-          content: undefined, // Changed from null to undefined
+          content: undefined,
           numpages: data.numpages,
           reason: validationResult.reason,
           validationResult,
@@ -250,7 +248,7 @@ export class HybridPdfProcessor {
   // =============================================================================
 
   /**
-   * OCR v2.0: Enhanced page classification with text quality validation
+   * Enhanced page classification with universal text quality validation
    */
   private async classifyPagesWithValidation(
     pdfBuffer: Buffer,
@@ -278,7 +276,7 @@ export class HybridPdfProcessor {
         let validationResult: TextValidationResult | undefined;
 
         if (this.config.enableTextValidation && pageText.length > 0) {
-          // OCR v2.0: Use text quality validation for page classification
+          // Use universal text quality validation for page classification
           validationResult = await this.performTextValidation(
             pageText,
             `page-${i}`
@@ -344,11 +342,11 @@ export class HybridPdfProcessor {
   }
 
   // =============================================================================
-  // OCR v2.0: Text Quality Validation Implementation
+  // Universal Text Quality Validation Implementation
   // =============================================================================
 
   /**
-   * OCR v2.0: Perform text quality validation with timeout and error handling
+   * Perform universal text quality validation with timeout and error handling
    */
   private async performTextValidation(
     text: string,
@@ -382,9 +380,9 @@ export class HybridPdfProcessor {
         console.log(
           `🔍 [${context}] Metrics: chars=${
             result.metrics.charLength
-          }, syllables=${
-            result.metrics.syllableCount
-          }, density=${result.metrics.syllableDensity.toFixed(
+          }, words=${
+            result.metrics.wordCount
+          }, density=${result.metrics.wordDensity.toFixed(
             4
           )}, entropy=${result.metrics.entropy.toFixed(2)}`
         );
@@ -405,19 +403,19 @@ export class HybridPdfProcessor {
       // Fallback to legacy logic
       const isValid = text.length > this.config.minTextLengthForTextBased;
       return {
-        confidence: isValid ? 0.6 : 0.2, // Conservative confidence scores
+        confidence: isValid ? 0.6 : 0.2,
         isValid,
         reason: `Validation failed, legacy check: ${
           isValid ? "passed" : "failed"
         }`,
         metrics: {
           charLength: text.length,
-          syllableCount: 0,
-          syllableDensity: 0,
-          entropy: 0,
           wordCount: 0,
+          wordDensity: 0,
+          entropy: 0,
           uniqueCharCount: 0,
           repetitivePatterns: false,
+          averageWordLength: 0,
         },
       };
     }
@@ -486,7 +484,7 @@ export class HybridPdfProcessor {
   }
 
   /**
-   * Process single page OCR (unchanged from original)
+   * Process single page OCR
    */
   private async processOcrPage(
     convert: any,
@@ -548,7 +546,7 @@ export class HybridPdfProcessor {
   // =============================================================================
 
   /**
-   * OCR v2.0: Enhanced result consolidation with validation metadata
+   * Enhanced result consolidation with validation metadata
    */
   private async consolidateResultsWithValidation(
     pagesWithText: Map<number, string>,
@@ -650,7 +648,7 @@ export class HybridPdfProcessor {
   }
 
   // =============================================================================
-  // Helper Methods (Enhanced)
+  // Helper Methods
   // =============================================================================
 
   /**
@@ -678,7 +676,6 @@ export class HybridPdfProcessor {
       ocrPages: ocrPages ?? 0,
       skippedPages: skippedPages ?? 0,
       method,
-      // OCR v2.0: Validation metadata
       validationEnabled: this.config.enableTextValidation,
       averageConfidence: validationSummary?.confidence,
       validationTime: this.validationStats.totalValidationTime,
@@ -695,7 +692,7 @@ export class HybridPdfProcessor {
   }
 
   /**
-   * OCR v2.0: Log validation statistics for monitoring
+   * Log validation statistics for monitoring
    */
   private logValidationStats(): void {
     if (this.config.logValidationDecisions) {
@@ -726,14 +723,14 @@ export class HybridPdfProcessor {
   }
 
   /**
-   * Delay utility (unchanged)
+   * Delay utility
    */
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
-   * Cleanup resources (enhanced)
+   * Cleanup resources
    */
   cleanup(): void {
     this.ocrService.cleanup();
@@ -749,7 +746,7 @@ export class HybridPdfProcessor {
 }
 
 // =============================================================================
-// Factory Functions (Enhanced)
+// Factory Functions
 // =============================================================================
 
 let hybridProcessorInstance: HybridPdfProcessor | null = null;
@@ -762,7 +759,7 @@ export const getHybridPdfProcessor = (apiKey?: string): HybridPdfProcessor => {
 };
 
 // =============================================================================
-// Utility Functions (Enhanced)
+// Utility Functions
 // =============================================================================
 
 /**
@@ -780,7 +777,6 @@ export const processHybridPdf = async (
 
 /**
  * Enhanced function to check if a PDF needs OCR processing
- * @warning This function uses Node.js-only dependencies (VNTK) when called on server-side
  * @param pdfBuffer - PDF file buffer
  */
 export const checkIfPdfNeedsOcr = async (
@@ -796,29 +792,23 @@ export const checkIfPdfNeedsOcr = async (
     const data = await pdf(pdfBuffer);
     const extractedText = data.text || "";
 
-    // ✅ FIX: Add client-side check to prevent VNTK import on client-side
-    if (typeof window !== "undefined") {
-      // Client-side: Use simple fallback logic without validation
-      console.warn(
-        "checkIfPdfNeedsOcr called on client-side, using fallback logic"
-      );
-      const needsOcr =
-        !extractedText ||
-        extractedText.length < OCR_CONFIG.MIN_TEXT_LENGTH_FOR_TEXT_BASED;
-
+    // Client-side check to prevent import issues
+    if (typeof window !== 'undefined') {
+      console.warn('checkIfPdfNeedsOcr called on client-side, using fallback logic');
+      const needsOcr = !extractedText || extractedText.length < OCR_CONFIG.MIN_TEXT_LENGTH_FOR_TEXT_BASED;
+      
       return {
         needsOcr,
         textLength: extractedText?.length || 0,
         pageCount: data.numpages,
-        reason: needsOcr
-          ? "Client-side: Text length below threshold"
+        reason: needsOcr 
+          ? "Client-side: Text length below threshold" 
           : "Client-side: Text length above threshold",
       };
     }
 
-    // Server-side: Use full validation with VNTK support
+    // Server-side: Use full validation
     if (OCR_CONFIG.ENABLE_TEXT_VALIDATION && extractedText.length > 0) {
-      // Use new validation system
       const validationResult = await validateTextQuality(extractedText);
 
       return {
@@ -846,7 +836,7 @@ export const checkIfPdfNeedsOcr = async (
   } catch (error) {
     console.error("Failed to check PDF OCR requirements:", error);
     return {
-      needsOcr: true, // Assume needs OCR on error
+      needsOcr: true,
       textLength: 0,
       pageCount: 0,
       reason: "Error during PDF analysis",
