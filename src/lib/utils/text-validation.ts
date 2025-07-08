@@ -1,3 +1,5 @@
+// UPDATED: 08-07-2025 - Added client-side warnings and improved server-side checks
+
 // OCR v2.0 Text Quality Validation System
 
 import { OCR_CONFIG } from "@/types/ocr";
@@ -31,13 +33,25 @@ export interface ValidationConfig {
 /**
  * Enhanced text quality validation using multiple heuristics
  * Designed to detect meaningless content like dots, repetitive patterns, etc.
+ * @warning This class should only be used on server-side (Node.js environment)
  */
 export class TextQualityValidator {
   private config: ValidationConfig;
   private vntkAvailable: boolean = false;
   private entropyCalculator: any = null;
+  private isServerSide: boolean;
 
   constructor(config?: Partial<ValidationConfig>) {
+    // ✅ IMPROVED: Better client-side detection and warning
+    this.isServerSide = typeof window === 'undefined';
+    
+    if (!this.isServerSide) {
+      console.warn(
+        '⚠️ TextQualityValidator: This class is designed for server-side use only. ' +
+        'VNTK and other Node.js dependencies may not work properly in browser environment.'
+      );
+    }
+
     this.config = {
       minAbsoluteLength: OCR_CONFIG.MIN_ABSOLUTE_LENGTH || 10,
       minSyllableCount: OCR_CONFIG.MIN_SYLLABLE_COUNT || 3,
@@ -48,7 +62,10 @@ export class TextQualityValidator {
       ...config,
     };
 
-    this.initializeDependencies();
+    // Only initialize dependencies on server-side
+    if (this.isServerSide) {
+      this.initializeDependencies();
+    }
   }
 
   /**
@@ -56,9 +73,11 @@ export class TextQualityValidator {
    * Only loads on server-side environment
    */
   private async initializeDependencies(): Promise<void> {
-    // Only initialize on server-side
-    if (typeof window !== 'undefined') {
-      console.warn("Server-side dependencies not available in browser environment");
+    // ✅ IMPROVED: Double-check server-side environment
+    if (!this.isServerSide) {
+      console.warn(
+        "⚠️ TextQualityValidator: Server-side dependencies not available in browser environment"
+      );
       return;
     }
 
@@ -66,9 +85,10 @@ export class TextQualityValidator {
       // Try to load fast-password-entropy for entropy calculation
       const stringEntropy = await import("fast-password-entropy");
       this.entropyCalculator = stringEntropy.default;
+      console.log("✅ TextQualityValidator: fast-password-entropy loaded successfully");
     } catch (error) {
       console.warn(
-        "fast-password-entropy not available, using fallback entropy calculation"
+        "⚠️ TextQualityValidator: fast-password-entropy not available, using fallback entropy calculation"
       );
     }
 
@@ -76,17 +96,28 @@ export class TextQualityValidator {
       // Try to load vntk for Vietnamese text processing
       const vntk = await import("vntk");
       this.vntkAvailable = true;
+      console.log("✅ TextQualityValidator: VNTK loaded successfully for Vietnamese text processing");
     } catch (error) {
-      console.warn("vntk not available, using fallback word segmentation");
+      console.warn("⚠️ TextQualityValidator: VNTK not available, using fallback word segmentation");
     }
   }
 
   /**
    * Main validation function - determines if text is high quality or needs OCR
+   * @param text - Text to validate
+   * @returns Promise<TextValidationResult>
    */
   public async validateTextQuality(
     text: string
   ): Promise<TextValidationResult> {
+    // ✅ IMPROVED: Early client-side fallback
+    if (!this.isServerSide) {
+      console.warn(
+        "⚠️ TextQualityValidator: validateTextQuality called on client-side, using simplified validation"
+      );
+      return this.createClientSideFallbackResult(text);
+    }
+
     // Normalize and clean text
     const normalizedText = this.normalizeText(text);
 
@@ -111,6 +142,31 @@ export class TextQualityValidator {
       isValid,
       reason,
       metrics,
+    };
+  }
+
+  /**
+   * ✅ NEW: Client-side fallback validation (simple heuristics only)
+   */
+  private createClientSideFallbackResult(text: string): TextValidationResult {
+    const normalizedText = this.normalizeText(text);
+    
+    // Simple client-side validation without VNTK
+    const isValid = normalizedText.length >= OCR_CONFIG.MIN_TEXT_LENGTH_FOR_TEXT_BASED;
+    
+    return {
+      confidence: isValid ? 0.7 : 0.3, // Conservative confidence scores
+      isValid,
+      reason: `Client-side fallback: ${isValid ? 'Text length acceptable' : 'Text too short'}`,
+      metrics: {
+        charLength: normalizedText.length,
+        syllableCount: 0, // Not calculated on client-side
+        syllableDensity: 0, // Not calculated on client-side
+        entropy: 0, // Not calculated on client-side
+        wordCount: normalizedText.split(/\s+/).length,
+        uniqueCharCount: new Set(normalizedText.toLowerCase()).size,
+        repetitivePatterns: false, // Simplified check
+      },
     };
   }
 
@@ -212,7 +268,7 @@ export class TextQualityValidator {
       try {
         return this.entropyCalculator(text) / 10; // Normalize to reasonable range
       } catch (error) {
-        console.warn("Entropy calculation failed, using fallback");
+        console.warn("⚠️ TextQualityValidator: Entropy calculation failed, using fallback");
       }
     }
 
@@ -249,7 +305,7 @@ export class TextQualityValidator {
   private async calculateWordMetrics(
     text: string
   ): Promise<{ wordCount: number; syllableCount: number }> {
-    if (this.vntkAvailable) {
+    if (this.vntkAvailable && this.isServerSide) {
       return await this.calculateVietnameseMetrics(text);
     }
 
@@ -263,9 +319,9 @@ export class TextQualityValidator {
   private async calculateVietnameseMetrics(
     text: string
   ): Promise<{ wordCount: number; syllableCount: number }> {
-    // Only run on server-side
-    if (typeof window !== 'undefined') {
-      console.warn("VNTK is server-side only, using fallback");
+    // ✅ IMPROVED: Double-check server-side environment
+    if (!this.isServerSide) {
+      console.warn("⚠️ TextQualityValidator: VNTK is server-side only, using fallback");
       return this.calculateFallbackMetrics(text);
     }
 
@@ -279,7 +335,7 @@ export class TextQualityValidator {
         syllableCount: tokens.length, // In Vietnamese, words are typically syllables
       };
     } catch (error) {
-      console.warn("VNTK processing failed, using fallback");
+      console.warn("⚠️ TextQualityValidator: VNTK processing failed, using fallback");
       return this.calculateFallbackMetrics(text);
     }
   }

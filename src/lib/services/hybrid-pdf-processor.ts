@@ -1,5 +1,7 @@
 // Integrated OCR v2.0 text quality validation system
 
+// UPDATED: 08-07-2025 - Fixed VNTK client-side import issue in checkIfPdfNeedsOcr function
+
 import pdf from "pdf-parse";
 import { fromBuffer } from "pdf2pic";
 import { GeminiVisionOCR } from "./gemini-vision-ocr";
@@ -778,6 +780,8 @@ export const processHybridPdf = async (
 
 /**
  * Enhanced function to check if a PDF needs OCR processing
+ * @warning This function uses Node.js-only dependencies (VNTK) when called on server-side
+ * @param pdfBuffer - PDF file buffer
  */
 export const checkIfPdfNeedsOcr = async (
   pdfBuffer: Buffer
@@ -792,6 +796,27 @@ export const checkIfPdfNeedsOcr = async (
     const data = await pdf(pdfBuffer);
     const extractedText = data.text || "";
 
+    // ✅ FIX: Add client-side check to prevent VNTK import on client-side
+    if (typeof window !== "undefined") {
+      // Client-side: Use simple fallback logic without validation
+      console.warn(
+        "checkIfPdfNeedsOcr called on client-side, using fallback logic"
+      );
+      const needsOcr =
+        !extractedText ||
+        extractedText.length < OCR_CONFIG.MIN_TEXT_LENGTH_FOR_TEXT_BASED;
+
+      return {
+        needsOcr,
+        textLength: extractedText?.length || 0,
+        pageCount: data.numpages,
+        reason: needsOcr
+          ? "Client-side: Text length below threshold"
+          : "Client-side: Text length above threshold",
+      };
+    }
+
+    // Server-side: Use full validation with VNTK support
     if (OCR_CONFIG.ENABLE_TEXT_VALIDATION && extractedText.length > 0) {
       // Use new validation system
       const validationResult = await validateTextQuality(extractedText);
