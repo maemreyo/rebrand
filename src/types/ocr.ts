@@ -13,6 +13,7 @@ export interface OcrProcessingOptions {
   format?: 'png' | 'jpg' | 'jpeg';
   width?: number;
   height?: number;
+  forceOcr?: boolean; // New option to force OCR on all pages
 }
 
 export interface OcrPageResult {
@@ -161,6 +162,7 @@ const OcrProcessingOptionsSchema = z.object({
   format: z.enum(['png', 'jpg', 'jpeg']).default('png'),
   width: z.number().min(100).max(4000).optional(),
   height: z.number().min(100).max(4000).optional(),
+  forceOcr: z.boolean().default(false).optional(), // Added forceOcr
 });
 
 const HybridPdfResultSchema = z.object({

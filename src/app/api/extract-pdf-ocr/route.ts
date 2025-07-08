@@ -15,6 +15,43 @@ import {
   TextValidationError,
   OCR_CONFIG,
 } from "@/types/ocr";
+import { promises as fs } from "fs";
+import path from "path";
+
+// =============================================================================
+// Development Mock Data Support
+// =============================================================================
+
+/**
+ * Load mock data for development environment
+ */
+async function loadMockData(): Promise<EnhancedExtractPdfOcrResponse | null> {
+  try {
+    if (process.env.NODE_ENV !== "development") {
+      return null;
+    }
+
+    const mockDataPath = path.join(process.cwd(), "data", "extract-pdf-response.json");
+    const mockDataContent = await fs.readFile(mockDataPath, "utf-8");
+    const mockData = JSON.parse(mockDataContent);
+    
+    console.log("🔧 [DEV] Using mock data from extract-pdf-response.json");
+    return mockData;
+  } catch (error) {
+    console.warn("⚠️ [DEV] Could not load mock data:", error);
+    return null;
+  }
+}
+
+/**
+ * Check if we should use mock data in development
+ */
+function shouldUseMockData(): boolean {
+  return (
+    process.env.NODE_ENV === "development" && 
+    process.env.USE_MOCK_PDF_EXTRACTION === "true"
+  );
+}
 
 // =============================================================================
 // Enhanced Request/Response Schemas
@@ -30,6 +67,7 @@ const ExtractPdfOcrRequestSchema = z.object({
       format: z.enum(["png", "jpg", "jpeg"]).default("png"),
       width: z.number().min(100).max(4000).optional(),
       height: z.number().min(100).max(4000).optional(),
+      forceOcr: z.boolean().default(false), // Add forceOcr to schema
     })
     .optional(),
   progressCallback: z.boolean().default(false),
@@ -184,6 +222,36 @@ export async function POST(
 
     const { enableOcr, ocrOptions, validationOptions } = validationResult.data;
 
+    // =============================================================================
+    // Development Mock Data Support
+    // =============================================================================
+    
+    // Check if we should use mock data in development
+    if (shouldUseMockData()) {
+      console.log("🔧 [DEV] Development mode detected - attempting to use mock data");
+      const mockData = await loadMockData();
+      if (mockData) {
+        // Update mock data with current file metadata
+        if (mockData.data) {
+          mockData.data.metadata.filename = file.name;
+          mockData.data.metadata.fileSize = file.size;
+          mockData.data.metadata.totalProcessingTime = Date.now() - startTime;
+        }
+        
+        console.log("✅ [DEV] Returning mock data for development");
+        return NextResponse.json(mockData, { status: 200 });
+      } else {
+        console.log("⚠️ [DEV] Mock data not available, falling back to normal processing");
+      }
+    }
+
+    // // TEMPORARY: Force forceOcr to true for testing purposes
+    // if (ocrOptions) {
+    //   ocrOptions.forceOcr = true;
+    // } else {
+    //   requestOptions.ocrOptions = { forceOcr: true };
+    // }
+
     // Convert file to buffer
     const pdfBuffer = Buffer.from(await file.arrayBuffer());
 
@@ -247,6 +315,7 @@ export async function POST(
     }
 
     // If OCR is disabled or not needed, use simple text extraction
+    console.log(`[DEBUG] enableOcr: ${enableOcr}, ocrCheck.needsOcr: ${ocrCheck.needsOcr}`);
     if (!enableOcr || !ocrCheck.needsOcr) {
       return await processTextOnlyPdfEnhanced(
         pdfBuffer,
@@ -277,6 +346,7 @@ export async function POST(
     if (ocrOptions) {
       try {
         processedOcrOptions = validateOcrOptions(ocrOptions);
+        console.log(`[DEBUG] Processed OCR Options:`, processedOcrOptions);
       } catch (error) {
         console.warn("Invalid OCR options, using defaults:", error);
       }

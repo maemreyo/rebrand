@@ -281,6 +281,7 @@ export class GeminiVisionOCR {
    * Call Gemini Vision API
    */
   private async callGeminiVision(request: GeminiVisionRequest): Promise<string> {
+    console.log(`[DEBUG] Calling Gemini Vision API for model: ${request.model || this.config.model}`);
     try {
       const result = await this.genAI.models.generateContent({
         model: request.model || this.config.model,

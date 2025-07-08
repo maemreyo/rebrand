@@ -162,6 +162,8 @@ export class GeminiDocumentProcessor {
       if (!jsonString) {
         throw new DocumentProcessingError('No response from Gemini AI');
       }
+      console.log("DEBUG: Raw JSON from Gemini (processDocument):");
+      console.log(jsonString);
 
       const parsedDocument = JSON.parse(jsonString);
       return validateCanonicalDocument(parsedDocument);
@@ -197,6 +199,8 @@ export class GeminiDocumentProcessor {
     if (!jsonString) {
       throw new DocumentProcessingError('No response from simplified processing');
     }
+    console.log("DEBUG: Raw JSON from Gemini (processWithSimplifiedPrompt):");
+    console.log(jsonString);
 
     const parsedDocument = JSON.parse(jsonString);
     return validateCanonicalDocument(parsedDocument);

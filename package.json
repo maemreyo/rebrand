@@ -29,7 +29,10 @@
     "test:ocr": "echo 'Testing OCR functionality...' && echo 'Please upload test PDFs through the web interface to test OCR capabilities.'",
     "postinstall": "node scripts/setup-ocr-dependencies.js --postinstall",
     "setup:ocr": "node scripts/setup-ocr-dependencies.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "mock:pdf:on": "node scripts/toggle-mock-pdf.js on",
+    "mock:pdf:off": "node scripts/toggle-mock-pdf.js off",
+    "mock:pdf:toggle": "node scripts/toggle-mock-pdf.js toggle"
   },
   "dependencies": {
     "@google/genai": "^1.8.0",

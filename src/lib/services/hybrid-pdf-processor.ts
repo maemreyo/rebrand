@@ -90,39 +90,53 @@ export class HybridPdfProcessor {
           this.config.enableTextValidation ? "ENABLED" : "DISABLED"
         }`
       );
+      if (options?.forceOcr) {
+        console.log(`⚠️ Force OCR enabled: All pages will be processed with OCR.`);
+      }
 
       // Step 1: Enhanced Initial Check with Text Quality Validation
-      const initialCheck = await this.performEnhancedInitialCheck(pdfBuffer);
+      // If forceOcr is true, we bypass the initial text check and directly go to page-level OCR
+      let initialCheckResult: { type: "text" | "scan_or_hybrid"; content?: string; numpages: number; reason?: string; validationResult?: TextValidationResult; };
+      if (options?.forceOcr) {
+        initialCheckResult = {
+          type: "scan_or_hybrid",
+          numpages: (await pdf(pdfBuffer)).numpages,
+          reason: "Force OCR enabled",
+        };
+      } else {
+        initialCheckResult = await this.performEnhancedInitialCheck(pdfBuffer);
+      }
 
-      if (initialCheck.type === "text") {
+      if (initialCheckResult.type === "text") {
         console.log(
           `✅ PDF is text-based (validation passed). Processing complete! (${
             Date.now() - startTime
           }ms)`
         );
         return this.createSuccessResult(
-          initialCheck.content!,
+          initialCheckResult.content!,
           filename,
           pdfBuffer.length,
-          initialCheck.numpages,
+          initialCheckResult.numpages,
           Date.now() - startTime,
           "text-only",
           [],
-          initialCheck.numpages,
+          initialCheckResult.numpages,
           0,
           0,
-          initialCheck.validationResult
+          initialCheckResult.validationResult
         );
       }
 
       console.log(
-        `🔍 PDF requires detailed analysis (validation: ${initialCheck.reason}). Starting page-level processing...`
+        `🔍 PDF requires detailed analysis (validation: ${initialCheckResult.reason}). Starting page-level processing...`
       );
 
       // Step 2: Enhanced Page-level Classification with Validation
       const pageClassifications = await this.classifyPagesWithValidation(
         pdfBuffer,
-        initialCheck.numpages
+        initialCheckResult.numpages,
+        options?.forceOcr // Pass forceOcr to page classification
       );
 
       // Step 3: OCR for pages that need it
@@ -137,7 +151,7 @@ export class HybridPdfProcessor {
         pageClassifications.pagesWithText,
         ocrResults,
         pageClassifications.validationResults,
-        initialCheck.numpages,
+        initialCheckResult.numpages,
         filename,
         pdfBuffer.length,
         Date.now() - startTime
@@ -252,7 +266,8 @@ export class HybridPdfProcessor {
    */
   private async classifyPagesWithValidation(
     pdfBuffer: Buffer,
-    numPages: number
+    numPages: number,
+    forceOcr: boolean = false // Add forceOcr parameter
   ): Promise<{
     pagesWithText: Map<number, string>;
     pagesToOcr: number[];
@@ -268,37 +283,44 @@ export class HybridPdfProcessor {
 
     for (let i = 1; i <= numPages; i++) {
       try {
-        const options = { max: 1, page_num: i };
-        const data = await pdf(pdfBuffer, options);
-        const pageText = data.text || "";
-
         let hasText = false;
+        let pageText = "";
         let validationResult: TextValidationResult | undefined;
 
-        if (this.config.enableTextValidation && pageText.length > 0) {
-          // Use universal text quality validation for page classification
-          validationResult = await this.performTextValidation(
-            pageText,
-            `page-${i}`
-          );
-          hasText = validationResult.isValid;
-          validationResults.set(i, validationResult);
-
-          console.log(
-            `📄 Page ${i}: ${
-              hasText ? "Text-based" : "Needs OCR"
-            } (confidence: ${validationResult.confidence.toFixed(3)}, chars: ${
-              pageText.length
-            })`
-          );
+        if (forceOcr) {
+          // If forceOcr is true, always mark as needs OCR
+          console.log(`⚠️ Page ${i}: Force OCR enabled, marking as needs OCR.`);
+          hasText = false;
+          pageText = ""; // No text extracted if forcing OCR
         } else {
-          // Fallback to legacy logic if validation is disabled or no text
-          hasText = pageText.trim().length > this.config.minTextLengthPerPage;
-          console.log(
-            `📄 Page ${i}: ${
-              hasText ? "Text-based" : "Needs OCR"
-            } (legacy check, chars: ${pageText.length})`
-          );
+          // Normal text extraction and validation
+          const options = { max: 1, page_num: i };
+          const data = await pdf(pdfBuffer, options);
+          pageText = data.text || "";
+
+          if (this.config.enableTextValidation && pageText.length > 0) {
+            validationResult = await this.performTextValidation(
+              pageText,
+              `page-${i}`
+            );
+            hasText = validationResult.isValid;
+            validationResults.set(i, validationResult);
+
+            console.log(
+              `📄 Page ${i}: ${
+                hasText ? "Text-based" : "Needs OCR"
+              } (confidence: ${validationResult.confidence.toFixed(3)}, chars: ${
+                pageText.length
+              })`
+            );
+          } else {
+            hasText = pageText.trim().length > this.config.minTextLengthPerPage;
+            console.log(
+              `📄 Page ${i}: ${
+                hasText ? "Text-based" : "Needs OCR"
+              } (legacy check, chars: ${pageText.length})`
+            );
+          }
         }
 
         const classification: PageClassification = {
